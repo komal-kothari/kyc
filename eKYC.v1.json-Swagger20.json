@@ -533,6 +533,85 @@
           }
         }
       }
+    },
+    "/dealer/{msisdn}/transactions": {
+      "get": {
+        "description": "This API can be used to retrieve the Dealer Transaction History from eKYC System",
+        "summary": "get-dealer-msisdn-history",
+        "operationId": "get-dealer-msisdn-history",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "msisdn",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "records",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "Maximum Number of Transaction Records to be retrieved in response"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time",
+            "description": "Dealer Transactions to be retrieved from given date"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time",
+            "description": "Dealer Transactions to be retrieved upto given date"
+          },
+          {
+            "name": "txnType",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Comma separated list of Transaction Types to be retrieved: NID_QUERY, KYC_STATUS, KYC_QUERY, KYC_CREATE, KYC_UPDATE, CHANGE_PIN"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -1089,6 +1168,70 @@
         "newPIN"
       ]
     },
+    "DealerTxn": {
+      "title": "DealerTxn",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Type of Transaction:  STOCK_TXFR",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "type": {
+          "$ref": "#/definitions/Type"
+        },
+        "time": {
+          "description": "Time of Transaction",
+          "type": "string",
+          "format": "date-time"
+        },
+        "param1": {
+          "description": "Transaction Details: Should be intrepreted based on Transaction Type",
+          "type": "string"
+        },
+        "param2": {
+          "description": "Transaction Details: Should be intrepreted based on Transaction Type",
+          "type": "string"
+        },
+        "param3": {
+          "description": "Transaction Details: Should be intrepreted based on Transaction Type",
+          "type": "string"
+        },
+        "param4": {
+          "description": "Transaction Details: Should be intrepreted based on Transaction Type",
+          "type": "string"
+        },
+        "param5": {
+          "description": "Transaction Details: Should be intrepreted based on Transaction Type",
+          "type": "string"
+        },
+        "status": {
+          "description": "Transaction Status: Result Code",
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "DealerTxnHistoryResponse": {
+      "title": "DealerTxnHistoryResponse",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/Result"
+        },
+        "transactions": {
+          "description": "List of Dealer Transactions",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DealerTxn"
+          }
+        }
+      },
+      "required": [
+        "result"
+      ]
+    },
     "Consent": {
       "title": "Consent",
       "description": "Whether Subscriber Consent is required, default 'N\"",
@@ -1217,6 +1360,19 @@
         "INVALID",
         "EXPIRED",
         "REPLACED"
+      ]
+    },
+    "Type": {
+      "title": "Type",
+      "description": "Type of Transaction: NID_QUERY, KYC_STATUS, KYC_QUERY, KYC_CREATE, KYC_UPDATE, CHANGE_PIN",
+      "type": "string",
+      "enum": [
+        "NID_QUERY",
+        "KYC_STATUS",
+        "KYC_QUERY",
+        "KYC_CREATE",
+        "KYC_UPDATE",
+        "CHANGE_PIN"
       ]
     }
   },
