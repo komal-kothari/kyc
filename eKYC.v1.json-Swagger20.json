@@ -160,6 +160,20 @@
         ],
         "parameters": [
           {
+            "name": "dealer",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "MSISDN of Dealer who is initiating the request"
+          },
+          {
+            "name": "pin",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Dealer PIN"
+          },
+          {
             "name": "body",
             "in": "body",
             "required": false,
@@ -234,6 +248,13 @@
             "maxLength": 20,
             "pattern": "[0-9]{20}",
             "description": "Interpretation of SearchNumbr depends on the \"searchType\" Field"
+          },
+          {
+            "name": "dealer",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "MSISDN of Dealer who is initiating the request"
           }
         ],
         "responses": {
@@ -297,6 +318,13 @@
             "required": true,
             "type": "string",
             "description": "Interpretation of SearchNumbr depends on the \"searchType\" Field"
+          },
+          {
+            "name": "dealer",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "MSISDN of Dealer who is initiating the request"
           }
         ],
         "responses": {
@@ -361,6 +389,20 @@
             "required": true,
             "type": "string",
             "description": "Interpretation of SearchNumbr depends on the \"searchType\" Field"
+          },
+          {
+            "name": "dealer",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "MSISDN of Dealer who is initiating the request"
+          },
+          {
+            "name": "pin",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Dealer PIN"
           },
           {
             "name": "body",
@@ -434,6 +476,20 @@
             "required": true,
             "type": "string",
             "description": "Interpretation of SearchNumbr depends on the \"searchType\" Field"
+          },
+          {
+            "name": "dealer",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "MSISDN of Dealer who is initiating the request"
+          },
+          {
+            "name": "pin",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Dealer PIN"
           },
           {
             "name": "body",
@@ -678,6 +734,10 @@
           "type": "string",
           "minLength": 1,
           "maxLength": 100
+        },
+        "info": {
+          "description": "Info field will have the information about why the Re-KYC is required",
+          "type": "string"
         }
       },
       "required": [
@@ -779,6 +839,28 @@
           "description": "IMSI",
           "type": "string",
           "maxLength": 20
+        },
+        "regDate": {
+          "description": "KYC Registration Date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "changeDate": {
+          "description": "Date of Last Update of KYC Record",
+          "type": "string",
+          "format": "date-time"
+        },
+        "kycStatus": {
+          "description": "Current Status of the KYC approval",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "simStatus": {
+          "description": "Current status of the SIM Activation",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
         }
       }
     },
@@ -948,20 +1030,6 @@
           "description": "Alternate Contact Number",
           "type": "string"
         },
-        "msisdn": {
-          "description": "MSISDN/Service Number",
-          "type": "string"
-        },
-        "simNo": {
-          "description": "SIM Number",
-          "type": "string",
-          "maxLength": 20
-        },
-        "imsi": {
-          "description": "IMSI",
-          "type": "string",
-          "maxLength": 20
-        },
         "reKyc": {
           "description": "This field determines where the KYC Record is for Re-KYC or new KYC Record",
           "example": false,
@@ -972,6 +1040,9 @@
           "description": "Comment, if any",
           "type": "string",
           "maxLength": 100
+        },
+        "kycMode": {
+          "$ref": "#/definitions/KycMode"
         }
       },
       "required": [
@@ -1060,6 +1131,19 @@
         "Male"
       ]
     },
+    "KycMode": {
+      "title": "KycMode",
+      "description": "KYC Mode: Mode by which KYC Request is initiated",
+      "type": "string",
+      "enum": [
+        "USSD",
+        "SMS",
+        "APP",
+        "GUI",
+        "SYS",
+        "MIG"
+      ]
+    },
     "MaritialStatus": {
       "title": "MaritialStatus",
       "description": "Person's Maritial Status",
@@ -1131,7 +1215,8 @@
         "VERIFIED",
         "VALID",
         "INVALID",
-        "EXPIRED"
+        "EXPIRED",
+        "REPLACED"
       ]
     }
   },
