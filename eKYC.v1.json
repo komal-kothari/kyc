@@ -30,8 +30,8 @@
           },
           "name": "msisdn",
           "in": "path",
-          "required": true,
-          "description": "Dealer MSISDN"
+          "description": "Dealer MSISDN",
+          "required": true
         }
       ],
       "get": {
@@ -219,7 +219,25 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "dealer",
+            "description": "MSISDN of Dealer who is initiating the request"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "pin",
+            "description": "Dealer PIN"
+          }
+        ]
       }
     },
     "/kyc/{searchType}/{searchNumber}/status": {
@@ -290,7 +308,17 @@
           }
         },
         "operationId": "get-kyc-status-searchType-searchNumber",
-        "description": "This API can be used to query the KYC status based on ServiceNumber, SIM No, IMSI or Transaction Id"
+        "description": "This API can be used to query the KYC status based on ServiceNumber, SIM No, IMSI or Transaction Id",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "dealer",
+            "description": "MSISDN of Dealer who is initiating the request"
+          }
+        ]
       }
     },
     "/kyc/{searchType}/{searchNumber}": {
@@ -332,7 +360,17 @@
           }
         },
         "operationId": "get-kyc",
-        "description": "This API can be used to Retrieve the KYC Info based on ServiceNumber, SIM No, IMSI"
+        "description": "This API can be used to Retrieve the KYC Info based on ServiceNumber, SIM No, IMSI",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "dealer",
+            "description": "MSISDN of Dealer who is initiating the request"
+          }
+        ]
       },
       "parameters": [
         {
@@ -360,7 +398,7 @@
         }
       ],
       "post": {
-        "summary": "Create KYC Record",
+        "summary": "Create KYC Record/Upload KYC",
         "tags": [],
         "operationId": "post-kyc-searchType-searchNumber",
         "responses": {
@@ -417,7 +455,25 @@
             }
           },
           "description": "KYC Record to be created on eKYC system"
-        }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "dealer",
+            "description": "MSISDN of Dealer who is initiating the request"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "pin",
+            "description": "Dealer PIN"
+          }
+        ]
       },
       "put": {
         "summary": "Update KYC (Re-KYC)",
@@ -467,7 +523,25 @@
             }
           },
           "description": "Re-KYC or KYC Update Information"
-        }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "dealer",
+            "description": "MSISDN of Dealer who is initiating the request"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "pin",
+            "description": "Dealer PIN"
+          }
+        ]
       }
     }
   },
@@ -479,7 +553,9 @@
         "x-tags": [
           "result"
         ],
-        "x-examples": {},
+        "x-examples": {
+          "example-1": {}
+        },
         "properties": {
           "code": {
             "type": "integer",
@@ -507,7 +583,8 @@
         },
         "required": [
           "code"
-        ]
+        ],
+        "description": ""
       },
       "DealerInfo": {
         "title": "DealerInfo",
@@ -687,6 +764,10 @@
             "description": "Current status of the SIM Activation",
             "maxLength": 100,
             "minLength": 1
+          },
+          "info": {
+            "type": "string",
+            "description": "Info field will have the information about why the Re-KYC is required"
           }
         },
         "required": [
@@ -815,6 +896,28 @@
             "type": "string",
             "description": "IMSI",
             "maxLength": 20
+          },
+          "regDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "KYC Registration Date"
+          },
+          "changeDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date of Last Update of KYC Record"
+          },
+          "kycStatus": {
+            "type": "string",
+            "description": "Current Status of the KYC approval",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "simStatus": {
+            "type": "string",
+            "description": "Current status of the SIM Activation",
+            "maxLength": 100,
+            "minLength": 1
           }
         }
       },
@@ -885,7 +988,8 @@
               "VERIFIED",
               "VALID",
               "INVALID",
-              "EXPIRED"
+              "EXPIRED",
+              "REPLACED"
             ]
           },
           "dataType": {
@@ -1030,20 +1134,6 @@
             "type": "string",
             "description": "Alternate Contact Number"
           },
-          "msisdn": {
-            "type": "string",
-            "description": "MSISDN/Service Number"
-          },
-          "simNo": {
-            "type": "string",
-            "description": "SIM Number",
-            "maxLength": 20
-          },
-          "imsi": {
-            "type": "string",
-            "description": "IMSI",
-            "maxLength": 20
-          },
           "reKyc": {
             "type": "boolean",
             "default": "FALSE",
@@ -1053,6 +1143,18 @@
             "type": "string",
             "maxLength": 100,
             "description": "Comment, if any"
+          },
+          "kycMode": {
+            "type": "string",
+            "enum": [
+              "USSD",
+              "SMS",
+              "APP",
+              "GUI",
+              "SYS",
+              "MIG"
+            ],
+            "description": "KYC Mode: Mode by which KYC Request is initiated"
           }
         },
         "required": [
