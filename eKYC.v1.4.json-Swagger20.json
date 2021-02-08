@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.3",
+    "version": "1.4",
     "title": "eKYC",
     "description": "eKYC APIs can be used by any external system to communicate with the eKYC platform, primarily for KYC Upload and Query KYC information. eKYC system also provides the APIs for National ID and Dealer Check",
     "contact": {
