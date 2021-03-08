@@ -1,0 +1,1903 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.5",
+    "title": "eKYC",
+    "description": "eKYC APIs can be used by any external system to communicate with the eKYC platform, primarily for KYC Upload and Query KYC information. eKYC system also provides the APIs for National ID and Dealer Check",
+    "contact": {
+      "name": "Tayana Software Solutions Pvt. Ltd."
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/ekyc/v1",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/dealer/{msisdn}": {
+      "get": {
+        "description": "Query Dealer API is invoked with the Dealer MSISDN, and eKYC System checks internally whether Any Dealer Exists in system with given MSISDN. If Dealer exists the eKYC system returns the Dealer Information.",
+        "summary": "get-dealer-msisdn",
+        "operationId": "get-dealer-msisdn",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "msisdn",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 11,
+            "pattern": "[0-9]{6,11}",
+            "description": "Dealer MSISDN"
+          },
+          {
+            "name": "refId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 30,
+            "description": "Application Reference Id, if Any"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/QueryDealerResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/dealer/{msisdn}/changepin": {
+      "put": {
+        "description": "Dealer Change-PIN API - This API is used to Change PIN for Dealer",
+        "summary": "put-dealer-msisdn-changepin",
+        "operationId": "put-dealer-msisdn-changepin",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "msisdn",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Dealer MSISDN"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": false,
+            "description": "Old PIN and New PIN should be provided in the request content along with the Application Reference Id",
+            "schema": {
+              "$ref": "#/definitions/ChangePinRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/nid": {
+      "post": {
+        "description": "This API can be used to Check the given NID for total number of KYCs registered against given NID, In response to this API call eKYC system returns whether NID is registered with eKYC system or not. API returns the number of SIMs registered against the NID, if NID is registered.",
+        "summary": "post-nid",
+        "operationId": "post-nid",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealer",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "MSISDN of Dealer who is initiating the request"
+          },
+          {
+            "name": "pin",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Dealer PIN"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/NIDStatusRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/NIDStatusQueryResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/id": {
+      "post": {
+        "description": "This API can be used to Check the total number of KYCs registered against given ID, In response to this API call eKYC system returns whether ID is registered with eKYC system or not. API returns the number of SIMs registered against the ID, if ID is registered.",
+        "summary": "post-id",
+        "operationId": "post-id",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dealer",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "MSISDN of Dealer who is initiating the request"
+          },
+          {
+            "name": "pin",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Dealer PIN"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/IDStatusRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/IDStatusQueryResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/id/{idType}/{idNumber}/details": {
+      "get": {
+        "description": "This API can be used to query the KYCs registered against given ID, In response to this API call eKYC system checks whether ID is registered with eKYC system or not, and returns the KYC details registered with the ID, if ID is registered.",
+        "summary": "get-id-details",
+        "operationId": "get-id-details",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "idType",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "idNumber",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "dealer",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "MSISDN of Dealer who is initiating the request"
+          },
+          {
+            "name": "pin",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Dealer PIN"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/NIDDetailsResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/kyc/{searchType}/{searchNumber}/status": {
+      "get": {
+        "description": "This API can be used to query the KYC status based on ServiceNumber, SIM No, IMSI or Transaction Id",
+        "summary": "get-kyc-status-searchType-searchNumber",
+        "operationId": "get-kyc-status-searchType-searchNumber",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "searchType",
+            "in": "path",
+            "required": true,
+            "enum": [
+              "sim",
+              "imsi",
+              "mobile",
+              "tid"
+            ],
+            "type": "string",
+            "description": "KYC Status Query InfoType to be searched"
+          },
+          {
+            "name": "searchNumber",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 20,
+            "pattern": "[0-9]{20}",
+            "description": "Interpretation of SearchNumbr depends on the \"searchType\" Field"
+          },
+          {
+            "name": "dealer",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "MSISDN of Dealer who is initiating the request"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/KycStatusResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/kyc/{searchType}/{searchNumber}": {
+      "get": {
+        "description": "This API can be used to Retrieve the KYC Info based on ServiceNumber, SIM No, IMSI",
+        "summary": "get-kyc",
+        "operationId": "get-kyc",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "searchType",
+            "in": "path",
+            "required": true,
+            "enum": [
+              "sim",
+              "imsi",
+              "mobile"
+            ],
+            "type": "string",
+            "description": "KYC Query InfoType to be searched"
+          },
+          {
+            "name": "searchNumber",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Interpretation of SearchNumbr depends on the \"searchType\" Field"
+          },
+          {
+            "name": "dealer",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "MSISDN of Dealer who is initiating the request"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/KYCQueryResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {}
+          }
+        }
+      },
+      "post": {
+        "description": "This API can be used to create the KYC Record on eKYC system and to upload the required KYC Documents.",
+        "summary": "post-kyc-searchType-searchNumber",
+        "operationId": "post-kyc-searchType-searchNumber",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "searchType",
+            "in": "path",
+            "required": true,
+            "enum": [
+              "sim",
+              "imsi",
+              "mobile"
+            ],
+            "type": "string",
+            "description": "KYC Query InfoType to be searched"
+          },
+          {
+            "name": "searchNumber",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Interpretation of SearchNumbr depends on the \"searchType\" Field"
+          },
+          {
+            "name": "dealer",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "MSISDN of Dealer who is initiating the request"
+          },
+          {
+            "name": "pin",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Dealer PIN"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": false,
+            "description": "KYC Record to be created on eKYC system",
+            "schema": {
+              "$ref": "#/definitions/KYCRecord"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {}
+          }
+        }
+      },
+      "put": {
+        "description": "This API can be used to update the KYC Record on eKYC system (Re-KYC)",
+        "summary": "put-kyc-searchType-searchNumber",
+        "operationId": "put-kyc-searchType-searchNumber",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "searchType",
+            "in": "path",
+            "required": true,
+            "enum": [
+              "sim",
+              "imsi",
+              "mobile"
+            ],
+            "type": "string",
+            "description": "KYC Query InfoType to be searched"
+          },
+          {
+            "name": "searchNumber",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Interpretation of SearchNumbr depends on the \"searchType\" Field"
+          },
+          {
+            "name": "dealer",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "MSISDN of Dealer who is initiating the request"
+          },
+          {
+            "name": "pin",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Dealer PIN"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": false,
+            "description": "Re-KYC or KYC Update Information",
+            "schema": {
+              "$ref": "#/definitions/KYCRecord"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/dealer/{msisdn}/transactions": {
+      "get": {
+        "description": "This API can be used to retrieve the Dealer Transaction History from eKYC System",
+        "summary": "get-dealer-msisdn-history",
+        "operationId": "get-dealer-msisdn-history",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "msisdn",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "records",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "description": "Maximum Number of Transaction Records to be retrieved in response"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time",
+            "description": "Dealer Transactions to be retrieved from given date"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time",
+            "description": "Dealer Transactions to be retrieved upto given date"
+          },
+          {
+            "name": "txnType",
+            "in": "query",
+            "required": false,
+            "enum": [
+              "NID_QUERY",
+              "KYC_STATUS",
+              "KYC_QUERY",
+              "KYC_CREATE",
+              "KYC_UPDATE",
+              "CHANGE_PIN"
+            ],
+            "type": "string",
+            "description": "Comma separated list of Transaction Types to be retrieved: NID_QUERY, KYC_STATUS, KYC_QUERY, KYC_CREATE, KYC_UPDATE, CHANGE_PIN"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/DealerTxnHistoryResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/msisdn/{msisdn}": {
+      "get": {
+        "description": "Get MSISDN Status API to check the MSISDN status from eKYC system. Generally this API would be used to check the MSISDN is valid or not, before proceeding with the SIM Sale, KYC submission.",
+        "summary": "get-msisdn-status",
+        "operationId": "get-msisdn-status",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "msisdn",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "refId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Application Reference Id, if Any"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MsisdnStatusQueryResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {}
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Result": {
+      "title": "Result",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "The unique response code that indicates the response status of the request. See the Response codes for more detailed information",
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "description": "Response description of the response code",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 100
+        },
+        "requestId": {
+          "description": "Application Request ID",
+          "type": "string",
+          "maxLength": 15,
+          "pattern": "(^[A-Za-z0-9])([A-Za-z0-9-_]+)"
+        },
+        "referenceId": {
+          "description": "eKYC System Internal Reference Identifier",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 30
+        },
+        "error": {
+          "description": "List of Error Message(s)",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 150
+          },
+          "uniqueItems": true,
+          "minLength": 0,
+          "maxLength": 150
+        }
+      },
+      "required": [
+        "code"
+      ]
+    },
+    "DealerInfo": {
+      "title": "DealerInfo",
+      "description": "eKYC Dealer's Information. The information includes Dealer MSISDN, Name, email, Creation & Expiry Date along with Status",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Dealer ID",
+          "type": "integer",
+          "format": "int64"
+        },
+        "msisdn": {
+          "description": "Dealer MSISDN",
+          "type": "string",
+          "pattern": "^([\\+]?)([0-9]){6,14}"
+        },
+        "name": {
+          "description": "Dealer Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "businessName": {
+          "description": "Dealer's Business Name",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "email": {
+          "description": "Dealer Email-Id",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "address": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 100
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expiryDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "msisdn",
+        "status"
+      ]
+    },
+    "GenericResponse": {
+      "title": "GenericResponse",
+      "description": "Generic Response Object to communicate only result without any additional operation related data/information",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/Result"
+        }
+      }
+    },
+    "NIDInfo": {
+      "title": "NIDInfo",
+      "description": "KYC counts associated with National ID",
+      "type": "object",
+      "properties": {
+        "nid": {
+          "description": "National ID",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        },
+        "registeredKYC": {
+          "description": "Total Registered KYC(s) with given NID",
+          "type": "integer",
+          "format": "int32"
+        },
+        "activeKYC": {
+          "description": "Total Active KYC(s) with given NID",
+          "type": "integer",
+          "format": "int32"
+        },
+        "allowedKYC": {
+          "description": "Remaining Allowed KYC(s) for given NID",
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "required": [
+        "nid",
+        "status",
+        "allowedKYC"
+      ]
+    },
+    "IDInfo": {
+      "title": "IDInfo",
+      "description": "KYC counts associated with requested ID",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/Type"
+        },
+        "id": {
+          "description": "Identity Number",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 30
+        },
+        "status": {
+          "$ref": "#/definitions/Status1"
+        },
+        "registeredKYC": {
+          "description": "Total Registered KYC(s) with given ID",
+          "example": 0,
+          "type": "integer",
+          "default": 0,
+          "format": "int32"
+        },
+        "activeKYC": {
+          "description": "Total Active KYC(s) with given ID",
+          "example": 0,
+          "type": "integer",
+          "default": 0,
+          "format": "int32"
+        },
+        "allowedKYC": {
+          "description": "Remaining Allowed KYC(s) for given ID",
+          "example": 0,
+          "type": "integer",
+          "default": "0",
+          "format": "int32"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "status",
+        "allowedKYC"
+      ]
+    },
+    "QueryDealerResponse": {
+      "title": "QueryDealerResponse",
+      "description": "Query Dealer API Response",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/Result"
+        },
+        "dealerInfo": {
+          "$ref": "#/definitions/DealerInfo"
+        }
+      },
+      "required": [
+        "result"
+      ]
+    },
+    "NIDStatusQueryResponse": {
+      "title": "NIDStatusQueryResponse",
+      "description": "NID Status Query API Response",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/Result"
+        },
+        "nidInfo": {
+          "$ref": "#/definitions/NIDInfo"
+        }
+      }
+    },
+    "IDStatusQueryResponse": {
+      "title": "IDStatusQueryResponse",
+      "description": "ID Status Query API Response",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/Result"
+        },
+        "nidInfo": {
+          "$ref": "#/definitions/IDInfo"
+        }
+      }
+    },
+    "KycStatusResponse": {
+      "title": "KycStatusResponse",
+      "description": "KYC Status Query Response",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/Result"
+        },
+        "kycInfo": {
+          "$ref": "#/definitions/KYCStatus"
+        }
+      },
+      "required": [
+        "result"
+      ]
+    },
+    "KYCStatus": {
+      "title": "KYCStatus",
+      "type": "object",
+      "properties": {
+        "serviceNumber": {
+          "description": "Service Number for which KYC Status was enquired",
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 20,
+          "pattern": "^([\\+]?)([0-9]){6,14}"
+        },
+        "kycStatus": {
+          "description": "Current Status of the KYC approval",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20
+        },
+        "simStatus": {
+          "description": "Current status of the SIM Activation",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20
+        },
+        "info": {
+          "description": "Info field will have the information about why the Re-KYC is required",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "serviceNumber"
+      ]
+    },
+    "MsisdnStatus": {
+      "title": "MsisdnStatus",
+      "description": "MSISDN Status",
+      "type": "object",
+      "properties": {
+        "serviceNumber": {
+          "description": "Service Number for which Status was enquired",
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 20,
+          "pattern": "^([\\+]?)([0-9]){6,14}"
+        },
+        "status": {
+          "description": "MSISDN Status 0-InvalidServiceNumber, 1-ReadForSale, 2-FreeHoldInventory, 3-NumberNotFound",
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "required": [
+        "serviceNumber",
+        "status"
+      ]
+    },
+    "KYCInfo": {
+      "title": "KYCInfo",
+      "description": "KYC Query Info",
+      "type": "object",
+      "properties": {
+        "customerType": {
+          "$ref": "#/definitions/CustomerType"
+        },
+        "title": {
+          "description": "Title or Salutation to be prefixed to person's name",
+          "type": "string",
+          "maxLength": 10
+        },
+        "firstName": {
+          "description": "First Name of a Person/Subscriber",
+          "type": "string",
+          "maxLength": 75
+        },
+        "middleName": {
+          "description": "Middle Name of a Person/Subscriber",
+          "type": "string",
+          "maxLength": 75
+        },
+        "lastName": {
+          "description": "Last name of a Person/Subscriber",
+          "type": "string",
+          "maxLength": 75
+        },
+        "subscriberName": {
+          "description": "In case it is different from the Documents. \nName of Minor Subscriber, in case SIM is issue by using other person’s documents",
+          "type": "string",
+          "maxLength": 100
+        },
+        "dob": {
+          "description": "Date of Birth of Person/Subscriber or Date of incorporation for business",
+          "type": "string",
+          "format": "date"
+        },
+        "pob": {
+          "description": "Place of Birth",
+          "type": "string",
+          "maxLength": 50
+        },
+        "Gender": {
+          "$ref": "#/definitions/Gender"
+        },
+        "emailId": {
+          "description": "Email Id of the Person/Subscriber",
+          "type": "string",
+          "maxLength": 75
+        },
+        "qualification": {
+          "description": "Educational/Academic Qualification",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "profession": {
+          "description": "Profession of the Person/Subscriber",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "maritialStatus": {
+          "$ref": "#/definitions/MaritialStatus"
+        },
+        "presentAddress": {
+          "$ref": "#/definitions/Address"
+        },
+        "permanentAddress": {
+          "$ref": "#/definitions/Address"
+        },
+        "documents": {
+          "description": "List of KYC Documents",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DocumentInfo"
+          },
+          "uniqueItems": true,
+          "minItems": 0,
+          "maxItems": 10
+        },
+        "altNumber": {
+          "description": "Alternate Contact Number",
+          "type": "string",
+          "pattern": "^([\\+]?)([0-9]){6,14}"
+        },
+        "msisdn": {
+          "description": "MSISDN/Service Number",
+          "type": "string",
+          "pattern": "^([\\+]?)([0-9]){6,14}"
+        },
+        "simNo": {
+          "description": "SIM Number",
+          "type": "string",
+          "maxLength": 20,
+          "pattern": "^[0-9]{6,20}"
+        },
+        "imsi": {
+          "description": "IMSI",
+          "type": "string",
+          "maxLength": 20,
+          "pattern": "^[0-9]{6,20}"
+        },
+        "regDate": {
+          "description": "KYC Registration Date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "changeDate": {
+          "description": "Date of Last Update of KYC Record",
+          "type": "string",
+          "format": "date-time"
+        },
+        "kycStatus": {
+          "description": "Current Status of the KYC approval",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "simStatus": {
+          "description": "Current status of the SIM Activation",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      }
+    },
+    "Address": {
+      "title": "Address",
+      "description": "Address Details",
+      "type": "object",
+      "properties": {
+        "buildingNumber": {
+          "description": "Buliding Number",
+          "type": "string",
+          "maxLength": 100
+        },
+        "addressLine1": {
+          "description": "Address Line 1",
+          "type": "string",
+          "maxLength": 200
+        },
+        "addressLine2": {
+          "description": "Address Line 2",
+          "type": "string",
+          "maxLength": 200
+        },
+        "addressLine3": {
+          "description": "Address Line 3",
+          "type": "string",
+          "maxLength": 200
+        },
+        "addressLine4": {
+          "description": "Address Line 4",
+          "type": "string",
+          "maxLength": 200
+        },
+        "zipcode": {
+          "description": "Zip code",
+          "type": "string",
+          "maxLength": 10
+        },
+        "region": {
+          "description": "Region/Area",
+          "type": "string",
+          "maxLength": 50
+        },
+        "city": {
+          "description": "City/District (selected from predefined list)",
+          "type": "string",
+          "maxLength": 50
+        },
+        "state": {
+          "description": "State/Province",
+          "type": "string",
+          "maxLength": 50
+        },
+        "country": {
+          "description": "Country",
+          "type": "string",
+          "maxLength": 50
+        }
+      }
+    },
+    "DocumentInfo": {
+      "title": "DocumentInfo",
+      "description": "Document Information",
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/definitions/Code"
+        },
+        "identityNumber": {
+          "description": "Document Identity Number",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 30
+        },
+        "issueDate": {
+          "description": "Document Issue/Creation date",
+          "type": "string",
+          "format": "date"
+        },
+        "validityDate": {
+          "description": "Document Expiry/Validity date",
+          "type": "string",
+          "format": "date"
+        },
+        "status": {
+          "$ref": "#/definitions/Status2"
+        },
+        "dataType": {
+          "$ref": "#/definitions/DataType"
+        },
+        "data1": {
+          "description": "BASE64 Encoded Binary Data (Max Size = 2 MB) - Front-Side scan of Document",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 2097152
+        },
+        "data2": {
+          "description": "BASE64 Encoded Binary Data (Max Size = 2 MB) - Back-Side scan of Document",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 2097152
+        }
+      },
+      "required": [
+        "code",
+        "identityNumber",
+        "dataType"
+      ]
+    },
+    "KYCRecord": {
+      "title": "KYCRecord",
+      "description": "KYC Query Info",
+      "type": "object",
+      "properties": {
+        "appRefId": {
+          "description": "Application Request ID",
+          "type": "string",
+          "maxLength": 15,
+          "pattern": "(^[A-Za-z0-9])([A-Za-z0-9-_]+)"
+        },
+        "customerType": {
+          "$ref": "#/definitions/CustomerType"
+        },
+        "title": {
+          "description": "Title or Salutation to be prefixed to person's name",
+          "type": "string",
+          "maxLength": 10
+        },
+        "firstName": {
+          "description": "First Name of a Person/Subscriber",
+          "type": "string",
+          "maxLength": 75
+        },
+        "middleName": {
+          "description": "Middle Name of a Person/Subscriber",
+          "type": "string",
+          "maxLength": 75
+        },
+        "lastName": {
+          "description": "Last name of a Person/Subscriber",
+          "type": "string",
+          "maxLength": 75
+        },
+        "subscriberName": {
+          "description": "In case it is different from the Documents. \nName of Minor Subscriber, in case SIM is issue by using other person’s documents",
+          "type": "string",
+          "maxLength": 100
+        },
+        "dob": {
+          "description": "Date of Birth of Person/Subscriber or Date of incorporation for business",
+          "type": "string",
+          "format": "date"
+        },
+        "pob": {
+          "description": "Place of Birth",
+          "type": "string",
+          "maxLength": 50
+        },
+        "Gender": {
+          "$ref": "#/definitions/Gender"
+        },
+        "emailId": {
+          "description": "Email Id of the Person/Subscriber",
+          "type": "string",
+          "maxLength": 75
+        },
+        "qualification": {
+          "description": "Educational/Academic Qualification",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "profession": {
+          "description": "Profession of the Person/Subscriber",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "maritialStatus": {
+          "$ref": "#/definitions/MaritialStatus"
+        },
+        "presentAddress": {
+          "$ref": "#/definitions/Address"
+        },
+        "permanentAddress": {
+          "$ref": "#/definitions/Address"
+        },
+        "documents": {
+          "description": "List of KYC Documents",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DocumentInfo"
+          },
+          "uniqueItems": true,
+          "minItems": 0,
+          "maxItems": 10
+        },
+        "altNumber": {
+          "description": "Alternate Contact Number",
+          "type": "string",
+          "pattern": "^([\\+]?)([0-9]){6,14}"
+        },
+        "reKyc": {
+          "description": "This field determines where the KYC Record is for Re-KYC or new KYC Record",
+          "example": false,
+          "type": "boolean",
+          "default": false
+        },
+        "comment": {
+          "description": "Comment, if any",
+          "type": "string",
+          "maxLength": 100
+        },
+        "kycMode": {
+          "$ref": "#/definitions/KycMode"
+        }
+      },
+      "required": [
+        "appRefId",
+        "customerType"
+      ]
+    },
+    "KYCQueryResponse": {
+      "title": "KYCQueryResponse",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/Result"
+        },
+        "kycInfo": {
+          "$ref": "#/definitions/KYCInfo"
+        }
+      }
+    },
+    "ChangePinRequest": {
+      "title": "ChangePinRequest",
+      "type": "object",
+      "properties": {
+        "appRefId": {
+          "description": "Application Request ID",
+          "type": "string",
+          "maxLength": 15,
+          "pattern": "(^[A-Za-z0-9])([A-Za-z0-9-_]+)"
+        },
+        "oldPIN": {
+          "description": "Old PIN",
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 10
+        },
+        "newPIN": {
+          "description": "new PIN",
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 10
+        }
+      },
+      "required": [
+        "appRefId",
+        "oldPIN",
+        "newPIN"
+      ]
+    },
+    "DealerTxn": {
+      "title": "DealerTxn",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Type of Transaction:  STOCK_TXFR",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "type": {
+          "$ref": "#/definitions/Type1"
+        },
+        "time": {
+          "description": "Time of Transaction",
+          "type": "string",
+          "format": "date-time"
+        },
+        "param1": {
+          "description": "Transaction Details: Should be intrepreted based on Transaction Type",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "param2": {
+          "description": "Transaction Details: Should be intrepreted based on Transaction Type",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "param3": {
+          "description": "Transaction Details: Should be intrepreted based on Transaction Type",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "param4": {
+          "description": "Transaction Details: Should be intrepreted based on Transaction Type",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "param5": {
+          "description": "Transaction Details: Should be intrepreted based on Transaction Type",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "status": {
+          "description": "Transaction Status: Result Code",
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "DealerTxnHistoryResponse": {
+      "title": "DealerTxnHistoryResponse",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/Result"
+        },
+        "transactions": {
+          "description": "List of Dealer Transactions",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DealerTxn"
+          }
+        }
+      },
+      "required": [
+        "result"
+      ]
+    },
+    "IDStatusRequest": {
+      "title": "IDStatusRequest",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/Type2"
+        },
+        "id": {
+          "description": "ID to be checked or queried",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "consent": {
+          "$ref": "#/definitions/Consent"
+        },
+        "consentMsg": {
+          "description": "Message to be sent to Subscriber seeking consent for revealing KYC details",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ]
+    },
+    "NIDStatusRequest": {
+      "title": "NIDStatusRequest",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "ID to be checked or queried",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "consent": {
+          "$ref": "#/definitions/Consent"
+        },
+        "consentMsg": {
+          "description": "Message to be sent to Subscriber seeking consent for revealing KYC details",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "MsisdnStatusQueryResponse": {
+      "title": "MsisdnStatusQueryResponse",
+      "description": "MSISDN Status Query API Response",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/Result"
+        },
+        "info": {
+          "$ref": "#/definitions/MsisdnStatus"
+        }
+      }
+    },
+    "NIDDetailsResponse": {
+      "title": "NIDDetailsResponse",
+      "description": "NID Detail Query Response",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/Result"
+        },
+        "active": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KYCInfo"
+          }
+        },
+        "inactive": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KYCInfo"
+          }
+        }
+      }
+    },
+    "Code": {
+      "title": "Code",
+      "description": "Type of KYC Document/Document Code",
+      "type": "string",
+      "enum": [
+        "NID",
+        "PASSPORT",
+        "DL",
+        "PHOTO",
+        "OTHERS",
+        "MINOR_DEC",
+        "CORP_REG",
+        "CID"
+      ]
+    },
+    "Consent": {
+      "title": "Consent",
+      "description": "Whether Subscriber Consent is required, default 'N\"",
+      "type": "string",
+      "enum": [
+        "Y",
+        "N"
+      ]
+    },
+    "CustomerType": {
+      "title": "CustomerType",
+      "description": "Customer Type (Individual, Minor, Corporate, Non-Citizen etc.)",
+      "type": "string",
+      "enum": [
+        "INDIVIDUAL",
+        "MINOR",
+        "CORPORATE",
+        "NON-CITIZEN",
+        "CID_SUBS",
+        "OFFICIAL",
+        "FOREIGNER",
+        "RESIDENT",
+        "INDIAN",
+        "WORK_PERMIT"
+      ]
+    },
+    "DataType": {
+      "title": "DataType",
+      "description": "KYC Document Data Format (PDF, JPG or PNG)",
+      "type": "string",
+      "enum": [
+        "PDF",
+        "JPG",
+        "PNG",
+        "NONE"
+      ]
+    },
+    "Gender": {
+      "title": "Gender",
+      "description": "Gender",
+      "type": "string",
+      "enum": [
+        "Female",
+        "Trans",
+        "Undisclosed",
+        "Male",
+        "Others"
+      ]
+    },
+    "KycMode": {
+      "title": "KycMode",
+      "description": "KYC Mode: Mode by which KYC Request is initiated",
+      "type": "string",
+      "enum": [
+        "USSD",
+        "SMS",
+        "APP",
+        "GUI",
+        "SYS",
+        "MIG"
+      ]
+    },
+    "MaritialStatus": {
+      "title": "MaritialStatus",
+      "description": "Person's Maritial Status",
+      "type": "string",
+      "enum": [
+        "Single",
+        "Married",
+        "Widowed",
+        "Divorced",
+        "Separated",
+        "Undisclosed"
+      ]
+    },
+    "searchType": {
+      "title": "searchType",
+      "type": "string",
+      "enum": [
+        "sim",
+        "imsi",
+        "mobile",
+        "tid"
+      ]
+    },
+    "searchType1": {
+      "title": "searchType1",
+      "type": "string",
+      "enum": [
+        "sim",
+        "imsi",
+        "mobile"
+      ]
+    },
+    "Status": {
+      "title": "Status",
+      "description": "Whether given NID is found in eKYC Subscriber database or not",
+      "type": "string",
+      "enum": [
+        "FOUND",
+        "NOT_FOUND"
+      ]
+    },
+    "Status1": {
+      "title": "Status1",
+      "description": "Whether given ID is found in eKYC Subscriber database or not",
+      "type": "string",
+      "enum": [
+        "FOUND",
+        "NOT_FOUND"
+      ]
+    },
+    "Status2": {
+      "title": "Status2",
+      "description": "Validity Status",
+      "type": "string",
+      "enum": [
+        "CREATED",
+        "UPLOADED",
+        "REJECTED",
+        "VERIFIED",
+        "VALID",
+        "INVALID",
+        "EXPIRED",
+        "REPLACED"
+      ]
+    },
+    "txnType": {
+      "title": "txnType",
+      "type": "string",
+      "enum": [
+        "NID_QUERY",
+        "KYC_STATUS",
+        "KYC_QUERY",
+        "KYC_CREATE",
+        "KYC_UPDATE",
+        "CHANGE_PIN"
+      ]
+    },
+    "Type": {
+      "title": "Type",
+      "type": "string",
+      "enum": [
+        "NID",
+        "PASSPORT",
+        "DL",
+        "CORP_REG",
+        "PHOTO",
+        "OTHERS",
+        "MINOR_DEC",
+        "CID"
+      ]
+    },
+    "Type1": {
+      "title": "Type1",
+      "description": "Type of Transaction: NID_QUERY, KYC_STATUS, KYC_QUERY, KYC_CREATE, KYC_UPDATE, CHANGE_PIN",
+      "type": "string",
+      "enum": [
+        "NID_QUERY",
+        "KYC_STATUS",
+        "KYC_QUERY",
+        "KYC_CREATE",
+        "KYC_UPDATE",
+        "CHANGE_PIN"
+      ]
+    },
+    "Type2": {
+      "title": "Type2",
+      "description": "Identity Type to be checked or queried",
+      "type": "string",
+      "enum": [
+        "NID",
+        "PASSPORT",
+        "DL",
+        "CORP_REG",
+        "PHOTO",
+        "OTHERS"
+      ]
+    }
+  },
+  "tags": [
+    {
+      "name": "KYC"
+    }
+  ]
+}
