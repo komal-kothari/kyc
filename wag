@@ -1,246 +1,249 @@
 {
-  "openapi": "3.0.0",
+  "swagger": "2.0",
   "info": {
-    "title": "WhatsApp GW API",
     "version": "1.0",
-    "summary": "A set of APIs to communicate to TSS WhatsAPP Gateway",
+    "title": "WhatsApp GW API",
     "description": "A set of APIs to communicate to TSS WhatsAPP Gateway",
     "contact": {
-      "name": "TSS",
-      "email": "support@tayana.in"
+      "email": "support@tayana.in",
+      "name": "TSS"
     }
   },
-  "servers": [
-    {
-      "url": "http://localhost:3000/wag/v1",
-      "description": "wag"
-    }
+  "host": "localhost:3000",
+  "basePath": "/wag/v1",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
   ],
   "paths": {
     "/text": {
       "post": {
-        "summary": "TEXT Message API",
-        "operationId": "post-text",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GenericResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "405": {
-            "description": "Method Not Allowed"
-          }
-        },
         "description": "Whats APP API for sending TEXT Message",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "Authorization",
-            "description": "API User Name & Password encoded in Base64 format"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/textMessage"
-              }
-            }
-          },
-          "description": ""
-        },
+        "summary": "post-text",
         "tags": [
           "WhatsApp",
           "TextMessage"
-        ]
-      }
-    },
-    "/media": {
-      "post": {
-        "summary": "Media Message API",
-        "operationId": "post-media",
+        ],
+        "operationId": "post-text",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "API User Name & Password encoded in Base64 format"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/textMessage"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GenericResponse"
-                }
-              }
-            }
-          }
-        },
-        "description": "WhatsAPP API for sending Media message in various formats, supported formats are Image, Document, Video and audio",
-        "parameters": [
-          {
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/GenericResponse"
             },
-            "in": "header",
-            "name": "Authorization",
-            "description": "API User Name & Password encoded in Base64 format"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/mediaMessage"
-              }
-            }
-          }
-        },
-        "tags": [
-          "WhatsApp",
-          "MediaMessage"
-        ]
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "textMessage": {
-        "title": "textMessage",
-        "type": "object",
-        "properties": {
-          "txnId": {
-            "$ref": "#/components/schemas/txnId"
+            "headers": {}
           },
-          "phone": {
-            "type": "string",
-            "pattern": "^[0-9]+",
-            "minLength": 5,
-            "maxLength": 20
+          "401": {
+            "description": "Unauthorized",
+            "headers": {}
           },
-          "text": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        "required": [
-          "phone",
-          "text"
-        ]
-      },
-      "GenericResponse": {
-        "title": "GenericResponse",
-        "type": "object",
-        "properties": {
-          "RefId": {
-            "type": "string",
-            "description": "Internally Generated Refernece Identifier"
-          },
-          "TxnId": {
-            "$ref": "#/components/schemas/txnId"
-          },
-          "status": {
-            "type": "integer",
-            "description": "Request Status : 0 - SUCCESS, 1- FAILURE"
-          },
-          "error": {
-            "type": "array",
-            "description": "List of Error Messages, if any",
-            "items": {
-              "type": "string"
-            }
-          },
-          "description": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "RefId",
-          "status"
-        ]
-      },
-      "mediaMessage": {
-        "description": "",
-        "type": "object",
-        "x-examples": {
-          "example-1": {
-            "phone": "{mobile number}",
-            "media": {
-              "type": "document",
-              "url": "{sample pdf url https://}",
-              "file": "{sample .pdf file name}",
-              "caption": "{sample text}"
-            }
-          }
-        },
-        "properties": {
-          "phone": {
-            "type": "string",
-            "minLength": 1
-          },
-          "media": {
-            "type": "object",
-            "required": [
-              "type",
-              "url",
-              "file",
-              "caption"
-            ],
-            "properties": {
-              "type": {
-                "type": "string",
-                "minLength": 1,
-                "enum": [
-                  "video",
-                  "audio",
-                  "image",
-                  "document"
-                ]
-              },
-              "url": {
-                "type": "string",
-                "minLength": 1,
-                "format": "uri"
-              },
-              "file": {
-                "type": "string",
-                "minLength": 1
-              },
-              "caption": {
-                "type": "string",
-                "minLength": 1
-              }
-            }
-          },
-          "txnId": {
-            "$ref": "#/components/schemas/txnId"
-          }
-        },
-        "required": [
-          "phone",
-          "media"
-        ]
-      },
-      "txnId": {
-        "title": "txnId",
-        "type": "object",
-        "properties": {
-          "txnId": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 25
+          "405": {
+            "description": "Method Not Allowed",
+            "headers": {}
           }
         }
       }
     },
-    "securitySchemes": {},
-    "responses": {}
+    "/media": {
+      "post": {
+        "description": "WhatsAPP API for sending Media message in various formats, supported formats are Image, Document, Video and audio",
+        "summary": "post-media",
+        "tags": [
+          "WhatsApp",
+          "MediaMessage"
+        ],
+        "operationId": "post-media",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "API User Name & Password encoded in Base64 format"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/mediaMessage"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenericResponse"
+            },
+            "headers": {}
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "textMessage": {
+      "title": "textMessage",
+      "type": "object",
+      "properties": {
+        "txnId": {
+          "$ref": "#/definitions/txnId"
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 20,
+          "pattern": "^[0-9]+"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "phone",
+        "text"
+      ]
+    },
+    "GenericResponse": {
+      "title": "GenericResponse",
+      "type": "object",
+      "properties": {
+        "RefId": {
+          "description": "Internally Generated Refernece Identifier",
+          "type": "string"
+        },
+        "TxnId": {
+          "$ref": "#/definitions/txnId"
+        },
+        "status": {
+          "description": "Request Status : 0 - SUCCESS, 1- FAILURE",
+          "type": "integer",
+          "format": "int32"
+        },
+        "error": {
+          "description": "List of Error Messages, if any",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "RefId",
+        "status"
+      ]
+    },
+    "mediaMessage": {
+      "title": "mediaMessage",
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string",
+          "minLength": 1
+        },
+        "media": {
+          "$ref": "#/definitions/Media"
+        },
+        "txnId": {
+          "$ref": "#/definitions/txnId"
+        }
+      },
+      "required": [
+        "phone",
+        "media"
+      ]
+    },
+    "txnId": {
+      "title": "txnId",
+      "type": "object",
+      "properties": {
+        "txnId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 25
+        }
+      }
+    },
+    "Media": {
+      "title": "Media",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/Type"
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1
+        },
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "caption": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "file",
+        "caption"
+      ]
+    },
+    "Type": {
+      "title": "Type",
+      "type": "string",
+      "enum": [
+        "video",
+        "audio",
+        "image",
+        "document"
+      ]
+    }
   },
   "tags": [
     {
