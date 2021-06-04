@@ -1,520 +1,545 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
-    "version": "1.0",
     "title": "SPR Credit Limit",
+    "version": "1.0",
     "description": "SPR Credit Limit APIs enable the third-party applications to amend the subscriber’s credit limit and to post credit/debit/reset to the subscriber's available credit limit.",
     "contact": {
-      "email": "supoprt@tayana.in",
       "name": "Tayana Software Solutions Pvt. Ltd.",
-      "url": "www.tayanasoftware.com"
+      "url": "www.tayanasoftware.com",
+      "email": "supoprt@tayana.in"
     }
   },
-  "host": "localhost:3000",
-  "basePath": "/abmf/v4",
-  "schemes": [
-    "http"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
+  "servers": [
+    {
+      "url": "http://localhost:3000/abmf/v4"
+    }
   ],
   "paths": {
     "/{service}/subscriber/{serviceNumber}/creditLimit": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/service"
+        },
+        {
+          "$ref": "#/components/parameters/serviceNumber"
+        }
+      ],
       "get": {
-        "description": "Get Credit Limit API can be used to retrieve the Subscriber's Credit Limit and Available Credit Limit.",
-        "summary": "get-CL",
+        "summary": "Get CL",
         "tags": [
           "Credit Limit",
           "Get CL",
           "Get Credit Limit"
         ],
-        "operationId": "get-CL",
-        "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "service",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Service Name"
-          },
-          {
-            "name": "serviceNumber",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Subscriber's Service Number e.g. MSISDN"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "API authentication  for external systems is done by HTTP basic authentication 'username: password' and is encoded in base64 and sent under the Authorization header"
-          },
-          {
-            "name": "AppId",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 50,
-            "description": "Application Transaction Reference Id"
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/GetCreditLimitResponse"
-            },
-            "headers": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCreditLimitResponse"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            },
-            "headers": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "401": {
-            "description": "Unauthorized",
-            "headers": {}
+            "description": "Unauthorized"
           },
           "404": {
-            "description": "Not Found",
-            "headers": {}
+            "description": "Not Found"
           },
           "405": {
-            "description": "Method Not Allowed",
-            "headers": {}
+            "description": "Method Not Allowed"
           },
           "500": {
-            "description": "Internal Server Error",
-            "headers": {}
+            "description": "Internal Server Error"
           }
-        }
+        },
+        "operationId": "get-CL",
+        "description": "Get Credit Limit API can be used to retrieve the Subscriber's Credit Limit and Available Credit Limit.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/AppId"
+          }
+        ]
       }
     },
     "/{service}/subscriber/{serviceNumber}/creditLimit/debit": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/service"
+        },
+        {
+          "$ref": "#/components/parameters/serviceNumber"
+        }
+      ],
       "post": {
+        "summary": "Debit CL",
+        "operationId": "post-debitCL",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
         "description": "Debit CL API can be used to post the debit on the Subscriber's Available Credit Limit. i.e. to decrement the Available Credit Limit",
-        "summary": "post-debitCL",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeCLRequest"
+              }
+            }
+          },
+          "description": "Debit Available Credit Limit request schema"
+        },
         "tags": [
           "Credit Limit",
           "Debit CL"
-        ],
-        "operationId": "post-debitCL",
-        "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "service",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Service Name"
-          },
-          {
-            "name": "serviceNumber",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Subscriber's Service Number e.g. MSISDN"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "API authentication  for external systems is done by HTTP basic authentication 'username: password' and is encoded in base64 and sent under the Authorization header"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": false,
-            "description": "Debit Available Credit Limit request schema",
-            "schema": {
-              "$ref": "#/definitions/ChangeCLRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Response"
-            },
-            "headers": {}
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            },
-            "headers": {}
-          },
-          "401": {
-            "description": "Unauthorized",
-            "headers": {}
-          },
-          "404": {
-            "description": "Not Found",
-            "headers": {}
-          },
-          "405": {
-            "description": "Method Not Allowed",
-            "headers": {}
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "headers": {}
-          }
-        }
+        ]
       }
     },
     "/{service}/subscriber/{serviceNumber}/creditLimit/credit": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/service"
+        },
+        {
+          "$ref": "#/components/parameters/serviceNumber"
+        }
+      ],
       "post": {
-        "description": "Credit - CL API can be used to post the credit on the Subscriber's Available Credit Limit. i.e. to increment the Available Credit Limit",
-        "summary": "post-creditCL",
-        "tags": [
-          "Credit Limit",
-          "Credit CL"
-        ],
+        "summary": "Credit CL",
         "operationId": "post-creditCL",
-        "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "service",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Service Name"
-          },
-          {
-            "name": "serviceNumber",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Subscriber's Service Number e.g. MSISDN"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "API authentication  for external systems is done by HTTP basic authentication 'username: password' and is encoded in base64 and sent under the Authorization header"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": false,
-            "description": "Credit Available Credit Limit request schema",
-            "schema": {
-              "$ref": "#/definitions/ChangeCLRequest"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Response"
-            },
-            "headers": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            },
-            "headers": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "401": {
-            "description": "Unauthorized",
-            "headers": {}
+            "description": "Unauthorized"
           },
           "404": {
-            "description": "Not Found",
-            "headers": {}
+            "description": "Not Found"
           },
           "405": {
-            "description": "Method Not Allowed",
-            "headers": {}
+            "description": "Method Not Allowed"
           },
           "500": {
-            "description": "Internal Server Error",
-            "headers": {}
+            "description": "Internal Server Error"
           }
-        }
+        },
+        "description": "Credit - CL API can be used to post the credit on the Subscriber's Available Credit Limit. i.e. to increment the Available Credit Limit",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeCLRequest"
+              }
+            }
+          },
+          "description": "Credit Available Credit Limit request schema"
+        },
+        "tags": [
+          "Credit Limit",
+          "Credit CL"
+        ]
       }
     },
     "/{service}/subscriber/{serviceNumber}/creditLimit/set": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/service"
+        },
+        {
+          "$ref": "#/components/parameters/serviceNumber"
+        }
+      ],
       "post": {
+        "summary": "Set CL",
+        "operationId": "post-setCL",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
         "description": "Set - CL API can be used to set the Subscriber's Credit Limit or Available Credit Limit to a specific value or to reset the Available Credit Limit as per defined credit limit.",
-        "summary": "post-setCL",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetCLRequest"
+              }
+            }
+          },
+          "description": "Set Credit Limit/Available Credit Limit request schema"
+        },
         "tags": [
           "Credit Limit",
           "Set ACL",
           "Set CL"
-        ],
-        "operationId": "post-setCL",
-        "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "service",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Service Name"
-          },
-          {
-            "name": "serviceNumber",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Subscriber's Service Number e.g. MSISDN"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "API authentication  for external systems is done by HTTP basic authentication 'username: password' and is encoded in base64 and sent under the Authorization header"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": false,
-            "description": "Set Credit Limit/Available Credit Limit request schema",
-            "schema": {
-              "$ref": "#/definitions/SetCLRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Response"
-            },
-            "headers": {}
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            },
-            "headers": {}
-          },
-          "401": {
-            "description": "Unauthorized",
-            "headers": {}
-          },
-          "404": {
-            "description": "Not Found",
-            "headers": {}
-          },
-          "405": {
-            "description": "Method Not Allowed",
-            "headers": {}
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "headers": {}
-          }
-        }
+        ]
       }
     }
   },
-  "definitions": {
-    "Response": {
-      "title": "Response",
-      "description": "General API Response Schema",
-      "type": "object",
-      "properties": {
-        "appTxnRefId": {
-          "description": "Application Transaction Reference Id received in request.",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 50
-        },
-        "ocsTxnRefId": {
-          "description": "Transaction Reference Id generated by OCS for the request",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 50
-        },
-        "errorCode": {
-          "description": "Error Code",
-          "type": "integer",
-          "format": "int64"
-        },
-        "status": {
-          "description": "Response status \n0 : SUCCESS\n1 : FAILURE\n2 : PARTIAL SUCCESS\n3 : PENDING\n4 : TIMEOUT",
-          "type": "integer",
-          "format": "int32"
-        },
-        "description": {
-          "description": "Response Description, Usually describes the error code.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "appTxnRefId",
-        "ocsTxnRefId",
-        "errorCode",
-        "status",
-        "description"
-      ]
-    },
-    "ErrorResponse": {
-      "title": "ErrorResponse",
-      "description": "General API Response Schema",
-      "type": "object",
-      "properties": {
-        "appTxnRefId": {
-          "description": "Application Transaction Reference Id received in request.",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 50
-        },
-        "ocsTxnRefId": {
-          "description": "Transaction Reference Id generated by OCS for the request",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 50
-        },
-        "status": {
-          "description": "Response status \n0 : SUCCESS\n1 : FAILURE\n2 : PARTIAL SUCCESS\n3 : PENDING\n4 : TIMEOUT",
-          "type": "integer",
-          "format": "int32"
-        },
-        "errorCode": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "error": {
-          "description": "Response Description, Usually describes the error code.",
-          "type": "array",
-          "items": {
-            "type": "string"
+  "components": {
+    "schemas": {
+      "Response": {
+        "description": "General API Response Schema",
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "appTxnRefId": "string",
+            "ocsTxnRefId": "string",
+            "errorCode": 0,
+            "status": 0,
+            "description": "string"
           }
-        }
+        },
+        "properties": {
+          "appTxnRefId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Application Transaction Reference Id received in request.",
+            "maxLength": 50
+          },
+          "ocsTxnRefId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Transaction Reference Id generated by OCS for the request",
+            "maxLength": 50
+          },
+          "errorCode": {
+            "type": "integer",
+            "description": "Error Code",
+            "format": "int64"
+          },
+          "status": {
+            "description": "Response status \n0 : SUCCESS\n1 : FAILURE\n2 : PARTIAL SUCCESS\n3 : PENDING\n4 : TIMEOUT",
+            "type": "integer"
+          },
+          "description": {
+            "type": "string",
+            "description": "Response Description, Usually describes the error code."
+          }
+        },
+        "required": [
+          "appTxnRefId",
+          "ocsTxnRefId",
+          "errorCode",
+          "status",
+          "description"
+        ]
       },
-      "required": [
-        "appTxnRefId",
-        "ocsTxnRefId",
-        "status",
-        "error"
-      ]
+      "ErrorResponse": {
+        "description": "General API Response Schema",
+        "type": "object",
+        "x-examples": {},
+        "properties": {
+          "appTxnRefId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Application Transaction Reference Id received in request.",
+            "maxLength": 50
+          },
+          "ocsTxnRefId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Transaction Reference Id generated by OCS for the request",
+            "maxLength": 50
+          },
+          "status": {
+            "description": "Response status \n0 : SUCCESS\n1 : FAILURE\n2 : PARTIAL SUCCESS\n3 : PENDING\n4 : TIMEOUT",
+            "type": "integer"
+          },
+          "errorCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "error": {
+            "type": "array",
+            "description": "Response Description, Usually describes the error code.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "appTxnRefId",
+          "ocsTxnRefId",
+          "status",
+          "error"
+        ]
+      },
+      "SetCLRequest": {
+        "description": "Postpaid Subscriber's Credit Limit or Available Credit Limit set/reset request, this schema is used for SET CL API for Credit Limit and Available Credit Limit.\nEither of \"creditLimit\" or \"availableCreditLimit\" tag is mandatory and request can have both \"creditLimit\" and \"availableCreditLimit\" tag as well at the same time.",
+        "type": "object",
+        "x-examples": {
+          "Set Credit Limit to 0": {
+            "appTxnRefId": "string",
+            "creditLimit": 0
+          },
+          "Set Available Credit Limit to 100": {
+            "appTxnRefId": "string",
+            "availableCreditLimit": 100
+          },
+          "set Credit Limit and Available Credit Limit to 100": {
+            "appTxnRefId": "string",
+            "creditLimit": 100,
+            "availableCreditLimit": 100
+          },
+          "Reset Available Credit Limit": {
+            "appTxnRefId": "string",
+            "availableCreditLimit": -1
+          },
+          "Example 2 - Set Available Credit Limit to 100 ": {
+            "appTxnRefId": "string",
+            "creditLimit": -1,
+            "availableCreditLimit": 100
+          }
+        },
+        "title": "",
+        "properties": {
+          "appTxnRefId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Application Transaction Reference Id",
+            "maxLength": 50
+          },
+          "creditLimit": {
+            "type": "integer",
+            "description": "Credit Limit value, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS.\n-1 No Change requested in Credit Limit",
+            "format": "int64",
+            "minimum": -1,
+            "default": -1
+          },
+          "availableCreditLimit": {
+            "type": "integer",
+            "description": "Available Credit Limit value, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS.\n-2 For Reset of Available Credit Limit and any other value to be set as Available Credit Limit.\n-1 No Chnage requested in Available Credit Limit",
+            "format": "int64",
+            "minimum": -2,
+            "default": -1
+          }
+        },
+        "required": [
+          "appTxnRefId"
+        ]
+      },
+      "ChangeCLRequest": {
+        "description": "Postpaid Subscriber's Available Credit Limit change request, this schema is used for both Debit/Credit APIs for Available Credit Limit",
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "appTxnRefId": "string",
+            "creditLimit": 0
+          }
+        },
+        "title": "",
+        "properties": {
+          "appTxnRefId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Application Transaction Reference Id",
+            "maxLength": 50
+          },
+          "creditLimit": {
+            "type": "integer",
+            "description": "Change in Credit Limit, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "appTxnRefId",
+          "creditLimit"
+        ]
+      },
+      "GetCreditLimitResponse": {
+        "description": "Response schema for Get Credit Limit API",
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "response": {
+              "appTxnRefId": "string",
+              "ocsTxnRefId": "string",
+              "errorCode": 0,
+              "status": 0,
+              "description": "string"
+            },
+            "creditLimit": 0,
+            "availableCreditLimit": 0,
+            "maxCreditLimit": 0
+          }
+        },
+        "properties": {
+          "response": {
+            "$ref": "#/components/schemas/Response"
+          },
+          "creditLimit": {
+            "type": "integer",
+            "description": "Subscriber's Credit Limit, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS",
+            "format": "int64"
+          },
+          "availableCreditLimit": {
+            "type": "integer",
+            "description": "Subscriber's currently available Credit Limit - which means how many units subscriber can still spend, Unit of the value of availableCreditLimit will be same as the Postpaid Core Bucket Unit defined on OCS",
+            "format": "int64"
+          },
+          "maxCreditLimit": {
+            "type": "integer",
+            "description": "Maximum Credit Limit allowed for the subscriber based on Credit Policy",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "response",
+          "creditLimit",
+          "availableCreditLimit"
+        ]
+      }
     },
-    "SetCLRequest": {
-      "title": "SetCLRequest",
-      "description": "Postpaid Subscriber's Credit Limit or Available Credit Limit set/reset request, this schema is used for SET CL API for Credit Limit and Available Credit Limit.\nEither of \"creditLimit\" or \"availableCreditLimit\" tag is mandatory and request can have both \"creditLimit\" and \"availableCreditLimit\" tag as well at the same time.",
-      "type": "object",
-      "properties": {
-        "appTxnRefId": {
-          "description": "Application Transaction Reference Id",
+    "securitySchemes": {},
+    "parameters": {
+      "service": {
+        "name": "service",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Service Name"
+      },
+      "serviceNumber": {
+        "name": "serviceNumber",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Subscriber's Service Number e.g. MSISDN"
+      },
+      "AppId": {
+        "name": "AppId",
+        "in": "query",
+        "required": false,
+        "schema": {
           "type": "string",
           "minLength": 1,
           "maxLength": 50
         },
-        "creditLimit": {
-          "description": "Credit Limit value, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS.\n-1 No Change requested in Credit Limit",
-          "example": -1,
-          "type": "integer",
-          "default": -1,
-          "minimum": -1.0,
-          "format": "int64"
-        },
-        "availableCreditLimit": {
-          "description": "Available Credit Limit value, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS.\n-2 For Reset of Available Credit Limit and any other value to be set as Available Credit Limit.\n-1 No Chnage requested in Available Credit Limit",
-          "example": -1,
-          "type": "integer",
-          "default": -1,
-          "minimum": -2.0,
-          "format": "int64"
-        }
+        "description": "Application Transaction Reference Id"
       },
-      "required": [
-        "appTxnRefId"
-      ]
-    },
-    "ChangeCLRequest": {
-      "title": "ChangeCLRequest",
-      "description": "Postpaid Subscriber's Available Credit Limit change request, this schema is used for both Debit/Credit APIs for Available Credit Limit",
-      "type": "object",
-      "properties": {
-        "appTxnRefId": {
-          "description": "Application Transaction Reference Id",
+      "Authorization": {
+        "name": "Authorization",
+        "in": "header",
+        "schema": {
           "type": "string",
-          "minLength": 1,
-          "maxLength": 50
+          "example": "Basic dXNlcm5hbWU6cGFzc3dvcmQ="
         },
-        "creditLimit": {
-          "description": "Change in Credit Limit, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS",
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "required": [
-        "appTxnRefId",
-        "creditLimit"
-      ]
-    },
-    "GetCreditLimitResponse": {
-      "title": "GetCreditLimitResponse",
-      "description": "Response schema for Get Credit Limit API",
-      "type": "object",
-      "properties": {
-        "response": {
-          "$ref": "#/definitions/Response"
-        },
-        "creditLimit": {
-          "description": "Subscriber's Credit Limit, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS",
-          "type": "integer",
-          "format": "int64"
-        },
-        "availableCreditLimit": {
-          "description": "Subscriber's currently available Credit Limit - which means how many units subscriber can still spend, Unit of the value of availableCreditLimit will be same as the Postpaid Core Bucket Unit defined on OCS",
-          "type": "integer",
-          "format": "int64"
-        },
-        "maxCreditLimit": {
-          "description": "Maximum Credit Limit allowed for the subscriber based on Credit Policy",
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "required": [
-        "response",
-        "creditLimit",
-        "availableCreditLimit"
-      ]
+        "description": "API authentication  for external systems is done by HTTP basic authentication 'username: password' and is encoded in base64 and sent under the Authorization header",
+        "required": true
+      }
     }
   },
   "tags": [
