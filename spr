@@ -85,7 +85,7 @@
           "$ref": "#/components/parameters/serviceNumber"
         }
       ],
-      "post": {
+      "put": {
         "summary": "Debit CL",
         "operationId": "post-debitCL",
         "responses": {
@@ -152,7 +152,7 @@
           "$ref": "#/components/parameters/serviceNumber"
         }
       ],
-      "post": {
+      "put": {
         "summary": "Credit CL",
         "operationId": "post-creditCL",
         "responses": {
@@ -219,7 +219,7 @@
           "$ref": "#/components/parameters/serviceNumber"
         }
       ],
-      "post": {
+      "put": {
         "summary": "Set CL",
         "operationId": "post-setCL",
         "responses": {
