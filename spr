@@ -28,8 +28,6 @@
       "get": {
         "summary": "Get CL",
         "tags": [
-          "Credit Limit",
-          "Get CL",
           "Get Credit Limit"
         ],
         "responses": {
@@ -141,7 +139,6 @@
           "description": "Debit Available Credit Limit request schema"
         },
         "tags": [
-          "Credit Limit",
           "Debit CL"
         ]
       }
@@ -209,7 +206,6 @@
           "description": "Credit Available Credit Limit request schema"
         },
         "tags": [
-          "Credit Limit",
           "Credit CL"
         ]
       }
@@ -277,8 +273,6 @@
           "description": "Set Credit Limit/Available Credit Limit request schema"
         },
         "tags": [
-          "Credit Limit",
-          "Set ACL",
           "Set CL"
         ]
       }
@@ -547,19 +541,10 @@
       "name": "Credit CL"
     },
     {
-      "name": "Credit Limit"
-    },
-    {
       "name": "Debit CL"
     },
     {
-      "name": "Get CL"
-    },
-    {
       "name": "Get Credit Limit"
-    },
-    {
-      "name": "Set ACL"
     },
     {
       "name": "Set CL"
