@@ -329,7 +329,7 @@
           "name": "searchNumber",
           "in": "path",
           "required": true,
-          "description": "Interpretation of SearchNumbr depends on the \"searchType\" Field"
+          "description": "Interpretation of SearchNumber depends on the \"searchType\" Field"
         }
       ],
       "get": {
@@ -501,7 +501,7 @@
           "name": "searchNumber",
           "in": "path",
           "required": true,
-          "description": "Interpretation of SearchNumbr depends on the \"searchType\" Field"
+          "description": "Interpretation of SearchNumber depends on the \"searchType\" Field"
         }
       ],
       "get": {
@@ -632,7 +632,7 @@
           "name": "searchNumber",
           "in": "path",
           "required": true,
-          "description": "Interpretation of SearchNumbr depends on the \"searchType\" Field"
+          "description": "Interpretation of SearchNumber depends on the \"searchType\" Field"
         }
       ],
       "post": {
@@ -1053,7 +1053,8 @@
           },
           "name": "searchType",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "KYC Status Query InfoType to be searched"
         },
         {
           "schema": {
@@ -1061,7 +1062,8 @@
           },
           "name": "searchNumber",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "Interpretation of SearchNumber depends on the \"searchType\" Field"
         }
       ],
       "post": {
