@@ -1054,7 +1054,7 @@
           "name": "searchType",
           "in": "path",
           "required": true,
-          "description": "KYC Status Query InfoType to be searched"
+          "description": "Service Status InfoType to be searched (sim/imsi/msisdn)"
         },
         {
           "schema": {
