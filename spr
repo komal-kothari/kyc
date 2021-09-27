@@ -285,11 +285,13 @@
         "type": "object",
         "x-examples": {
           "example-1": {
-            "appTxnRefId": "string",
-            "ocsTxnRefId": "string",
-            "errorCode": 0,
-            "status": 0,
-            "description": "string"
+            "value": {
+              "appTxnRefId": "string",
+              "ocsTxnRefId": "string",
+              "errorCode": 0,
+              "status": 0,
+              "description": "string"
+            }
           }
         },
         "properties": {
@@ -308,7 +310,7 @@
           "errorCode": {
             "type": "integer",
             "description": "Error Code",
-            "format": "int64"
+            "format": "int32"
           },
           "status": {
             "description": "Response status \n0 : SUCCESS\n1 : FAILURE\n2 : PARTIAL SUCCESS\n3 : PENDING\n4 : TIMEOUT",
@@ -350,7 +352,7 @@
           },
           "errorCode": {
             "type": "integer",
-            "format": "int64"
+            "format": "int32"
           },
           "error": {
             "type": "array",
@@ -368,30 +370,40 @@
         ]
       },
       "SetCLRequest": {
-        "description": "Postpaid Subscriber's Credit Limit or Available Credit Limit set/reset request, this schema is used for SET CL API for Credit Limit and Available Credit Limit.\nEither of \"creditLimit\" or \"availableCreditLimit\" tag is mandatory and request can have both \"creditLimit\" and \"availableCreditLimit\" tag as well at the same time.",
+        "description": "Postpaid Subscriber's Credit Limit or Available Credit Limit set/reset request, this schema is used for SET CL API for Credit Limit and Available Credit Limit.\n\nEither of \"creditLimit\" or \"availableCreditLimit\" tag is mandatory and request can have both \"creditLimit\" and \"availableCreditLimit\" tag as well at the same time.\n\nFor Reset of Available Credit Limit, availableCreditLimit tag should be set to -2 and creditLimit tag should be skipped in request or to be set to -1. If creditLimit tag has any value other then -1, the API call will be used to SetCreditLimit.",
         "type": "object",
         "x-examples": {
           "Set Credit Limit to 0": {
-            "appTxnRefId": "string",
-            "creditLimit": 0
+            "value": {
+              "appTxnRefId": "string",
+              "creditLimit": 0
+            }
           },
           "Set Available Credit Limit to 100": {
-            "appTxnRefId": "string",
-            "availableCreditLimit": 100
+            "value": {
+              "appTxnRefId": "string",
+              "availableCreditLimit": 100
+            }
           },
           "set Credit Limit and Available Credit Limit to 100": {
-            "appTxnRefId": "string",
-            "creditLimit": 100,
-            "availableCreditLimit": 100
+            "value": {
+              "appTxnRefId": "string",
+              "creditLimit": 100,
+              "availableCreditLimit": 100
+            }
           },
           "Reset Available Credit Limit": {
-            "appTxnRefId": "string",
-            "availableCreditLimit": -1
+            "value": {
+              "appTxnRefId": "string",
+              "availableCreditLimit": -2
+            }
           },
           "Example 2 - Set Available Credit Limit to 100 ": {
-            "appTxnRefId": "string",
-            "creditLimit": -1,
-            "availableCreditLimit": 100
+            "value": {
+              "appTxnRefId": "string",
+              "creditLimit": -1,
+              "availableCreditLimit": 100
+            }
           }
         },
         "title": "",
@@ -404,14 +416,14 @@
           },
           "creditLimit": {
             "type": "integer",
-            "description": "Credit Limit value, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS.\n-1 No Change requested in Credit Limit",
+            "description": "Credit Limit value, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS.\n-1 No Change requested in Credit Limit and for RESET of available Credit Limit",
             "format": "int64",
             "minimum": -1,
             "default": -1
           },
           "availableCreditLimit": {
             "type": "integer",
-            "description": "Available Credit Limit value, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS.\n-2 For Reset of Available Credit Limit and any other value to be set as Available Credit Limit.\n-1 No Chnage requested in Available Credit Limit",
+            "description": "Available Credit Limit value, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS.\n-2 For Reset of Available Credit Limit and any other value to be set as Available Credit Limit. \n-1 No Chnage requested in Available Credit Limit",
             "format": "int64",
             "minimum": -2,
             "default": -1
@@ -426,8 +438,10 @@
         "type": "object",
         "x-examples": {
           "example-1": {
-            "appTxnRefId": "string",
-            "creditLimit": 0
+            "value": {
+              "appTxnRefId": "",
+              "creditLimit": -9223372036854776000
+            }
           }
         },
         "title": "",
@@ -441,7 +455,8 @@
           "creditLimit": {
             "type": "integer",
             "description": "Change in Credit Limit, Unit of the value of creditLimit will be same as the Postpaid Core Bucket Unit defined on OCS",
-            "format": "int64"
+            "format": "int64",
+            "minimum": 1
           }
         },
         "required": [
@@ -454,16 +469,18 @@
         "type": "object",
         "x-examples": {
           "example-1": {
-            "response": {
-              "appTxnRefId": "string",
-              "ocsTxnRefId": "string",
-              "errorCode": 0,
-              "status": 0,
-              "description": "string"
-            },
-            "creditLimit": 0,
-            "availableCreditLimit": 0,
-            "maxCreditLimit": 0
+            "value": {
+              "response": {
+                "appTxnRefId": "string",
+                "ocsTxnRefId": "string",
+                "errorCode": 0,
+                "status": 0,
+                "description": "string"
+              },
+              "creditLimit": 0,
+              "availableCreditLimit": 0,
+              "maxCreditLimit": 0
+            }
           }
         },
         "properties": {
@@ -490,7 +507,8 @@
           "response",
           "creditLimit",
           "availableCreditLimit"
-        ]
+        ],
+        "title": ""
       }
     },
     "securitySchemes": {},
