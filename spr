@@ -511,7 +511,13 @@
         "title": ""
       }
     },
-    "securitySchemes": {},
+    "securitySchemes": {
+      "Authentication": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Authentication Header contains the Query Agent's UserName and Password with basic authentication scheme"
+      }
+    },
     "parameters": {
       "service": {
         "name": "service",
@@ -549,7 +555,7 @@
           "type": "string",
           "example": "Basic dXNlcm5hbWU6cGFzc3dvcmQ="
         },
-        "description": "API authentication  for external systems is done by HTTP basic authentication 'username: password' and is encoded in base64 and sent under the Authorization header",
+        "description": "API authentication  for external systems is done by HTTP basic authentication 'username:password' and is encoded in base64 and sent under the Authorization header",
         "required": true
       }
     }
