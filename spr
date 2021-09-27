@@ -143,6 +143,73 @@
         ]
       }
     },
+    "/{service}/subscriber/{serviceNumber}/creditLimit/set": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/service"
+        },
+        {
+          "$ref": "#/components/parameters/serviceNumber"
+        }
+      ],
+      "put": {
+        "summary": "Set CL",
+        "operationId": "post-setCL",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Set - CL API can be used to set the Subscriber's Credit Limit or Available Credit Limit to a specific value or to reset the Available Credit Limit as per defined credit limit.\n\nEither of \"creditLimit\" or \"availableCreditLimit\" tag is mandatory and request can have both \"creditLimit\" and \"availableCreditLimit\" tag as well at the same time.\n\nFor Reset of Available Credit Limit, availableCreditLimit tag should be set to -2 and creditLimit tag should be skipped in request or to be set to -1. If creditLimit tag has any value other then -1, the API call will be used to SetCreditLimit.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetCLRequest"
+              }
+            }
+          },
+          "description": "Set Credit Limit/Available Credit Limit request schema"
+        },
+        "tags": [
+          "Set CL"
+        ]
+      }
+    },
     "/{service}/subscriber/{serviceNumber}/creditLimit/credit": {
       "parameters": [
         {
@@ -207,73 +274,6 @@
         },
         "tags": [
           "Credit CL"
-        ]
-      }
-    },
-    "/{service}/subscriber/{serviceNumber}/creditLimit/set": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/service"
-        },
-        {
-          "$ref": "#/components/parameters/serviceNumber"
-        }
-      ],
-      "put": {
-        "summary": "Set CL",
-        "operationId": "post-setCL",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Response"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "405": {
-            "description": "Method Not Allowed"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "description": "Set - CL API can be used to set the Subscriber's Credit Limit or Available Credit Limit to a specific value or to reset the Available Credit Limit as per defined credit limit.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Authorization"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SetCLRequest"
-              }
-            }
-          },
-          "description": "Set Credit Limit/Available Credit Limit request schema"
-        },
-        "tags": [
-          "Set CL"
         ]
       }
     }
