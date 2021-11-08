@@ -245,7 +245,13 @@
         ]
       }
     },
-    "securitySchemes": {},
+    "securitySchemes": {
+      "Authentication": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "API authentication  for external systems is done by HTTP basic authentication 'username:password' and is encoded in base64 and sent under the Authorization header with basic authentication scheme"
+      }
+    },
     "parameters": {
       "AppId": {
         "name": "AppId",
