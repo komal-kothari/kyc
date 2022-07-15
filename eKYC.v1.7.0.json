@@ -1404,7 +1404,7 @@
         "properties": {
           "code": {
             "type": "integer",
-            "description": "The unique response code that indicates the response status of the request. See the Response codes for more detailed information"
+            "description": "The unique response code that indicates the response status of the request. (Success - 0), See the Response codes for more detailed information"
           },
           "message": {
             "type": "string",
