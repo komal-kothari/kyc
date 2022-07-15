@@ -1,5 +1,8 @@
 {
   "openapi": "3.0.0",
+  "x-stoplight": {
+    "id": "8ptshby68pdwy"
+  },
   "info": {
     "title": "eKYC",
     "version": "1.7.0",
@@ -1213,7 +1216,7 @@
           "name": "searchType",
           "in": "path",
           "required": true,
-          "description": "Info Type to be used (\"msisdn\")"
+          "description": "SearchType: Type for the Search Number  - \"msisdn\" in case of Suspend/Unsuspend API"
         },
         {
           "schema": {
@@ -1222,21 +1225,35 @@
           "name": "searchNumber",
           "in": "path",
           "required": true,
-          "description": "ServiceNumber/MSISDN"
+          "description": "ServiceNumber (MSISDN)"
         }
       ],
       "post": {
-        "summary": "",
-        "operationId": "post-spa-searchType-searchNumber-suspend",
+        "summary": "SPA Suspension Request",
+        "operationId": "post-spa-suspend",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericResponse"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericResponse"
+                }
+              }
+            }
           },
           "403": {
             "description": "Forbidden"
@@ -1248,7 +1265,7 @@
             "description": "Internal Server Error"
           }
         },
-        "description": "SPA API to Suspend SearchNumber \"MSISDN\" in the network Nodes.",
+        "description": "SPA API to Suspend (Reserve) the given MSISDN in the IN/OCS",
         "parameters": [
           {
             "schema": {
@@ -1264,20 +1281,21 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "appRefId": {
-                    "type": "string",
-                    "maxLength": 15,
-                    "pattern": "(^[A-Za-z0-9])([A-Za-z0-9-_]+)",
-                    "description": "Application Request ID"
-                  }
-                }
+                "$ref": "#/components/schemas/SuspensionRequest"
+              },
+              "examples": {}
+            },
+            "application/xml": {
+              "schema": {
+                "type": "string"
               }
             }
           },
-          "description": ""
-        }
+          "description": "Suspension Request - Document and Comment to be passed, if any, it would be recorded for tracking purpose on eKYC Platform"
+        },
+        "tags": [
+          "SPA"
+        ]
       }
     },
     "/spa/{searchType}/{searchNumber}/unSuspend": {
@@ -1289,7 +1307,7 @@
           "name": "searchType",
           "in": "path",
           "required": true,
-          "description": "Info Type to be used (\"msisdn\")"
+          "description": "SearchType: Type for the Search Number  - \"msisdn\" in case of Suspend/Unsuspend API"
         },
         {
           "schema": {
@@ -1298,18 +1316,76 @@
           "name": "searchNumber",
           "in": "path",
           "required": true,
-          "description": "ServiceNumber/MSISDN"
+          "description": "ServiceNumber (MSISDN)"
         }
       ],
       "post": {
-        "summary": "",
-        "operationId": "post-spa-searchType-searchNumber-unSuspend",
+        "summary": "SPA Unsuspension Request",
+        "operationId": "post-spa-unsuspend",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
-        "description": "SPA Api to Suspend any MSISDN in the network Nodes."
+        "description": "SPA API to Unsuspend (Unreserve) the given MSISDN in the IN/OCS",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuspensionRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          "description": "Unuspension Request - Document and Comment to be passed, if any, it would be recorded for tracking purpose on eKYC Platform"
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "dealer",
+            "description": "MSISDN of Dealer who is initiating the Request"
+          }
+        ],
+        "tags": [
+          "SPA"
+        ]
       }
     }
   },
@@ -1966,6 +2042,39 @@
           "dataType"
         ]
       },
+      "SupportingDocument": {
+        "title": "SupportingDocument",
+        "type": "object",
+        "description": "Supporting Document Information",
+        "properties": {
+          "dataType": {
+            "type": "string",
+            "description": "Supporting Document Data Format (PDF, JPG or PNG)",
+            "enum": [
+              "PDF",
+              "JPG",
+              "PNG",
+              "NONE"
+            ],
+            "default": "NONE"
+          },
+          "data1": {
+            "type": "string",
+            "maxLength": 2097152,
+            "description": "BASE64 Encoded Binary Data (Max Size = 2 MB) - Front-Side scan of Document",
+            "minLength": 0
+          },
+          "data2": {
+            "type": "string",
+            "maxLength": 2097152,
+            "description": "BASE64 Encoded Binary Data (Max Size = 2 MB) - Back-Side scan of Document",
+            "minLength": 0
+          }
+        },
+        "required": [
+          "dataType"
+        ]
+      },
       "KYCRecord": {
         "title": "KYCRecord",
         "type": "object",
@@ -2408,6 +2517,29 @@
           "appRefId",
           "operation",
           "service"
+        ]
+      },
+      "SuspensionRequest": {
+        "title": "SuspensionRequest",
+        "type": "object",
+        "x-examples": {},
+        "description": "Service Request Model to be used for Service Activation/Deactivation",
+        "properties": {
+          "appRefId": {
+            "$ref": "#/components/schemas/ApplicationRequestId"
+          },
+          "comment": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 150,
+            "description": "Request Comment"
+          },
+          "document": {
+            "$ref": "#/components/schemas/SupportingDocument"
+          }
+        },
+        "required": [
+          "appRefId"
         ]
       },
       "ServiceStatusResponse": {
