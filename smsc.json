@@ -1,456 +1,500 @@
 {
-  "openapi": "3.1.0",
-  "x-stoplight": {
-    "id": "dh5w3icrlwkxt"
-  },
+  "swagger": "2.0",
   "info": {
-    "title": "SMSC-Tracker_v.1.0.0",
     "version": "1.0",
+    "title": "SMSC-Tracker_v.1.0.0",
     "description": "SMSC Tracker API's to get details of SMS submitted, delivery attempts and SMS content",
     "contact": {
+      "email": "mailto:sast@tayana.in",
       "name": "Tayana Mobility Technologies",
-      "url": "http://www.tayanamobility.com",
-      "email": "mailto:sast@tayana.in"
-    },
-    "license": {
-      "name": "Tayana Proprietary License",
-      "url": "http://www.tayanamobility.com/license"
+      "url": "http://www.tayanamobility.com"
     }
   },
-  "servers": [
-    {
-      "url": "http://localhost:3000"
+  "host": "localhost:3000",
+  "basePath": "/",
+  "securityDefinitions": {
+    "SMSC-Basic-Authorization": {
+      "type": "basic"
     }
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
   ],
   "paths": {
     "/smsc/v1.0/getSubmitInfo": {
       "get": {
-        "summary": "Your GET endpoint",
-        "tags": [],
+        "description": "Your GET endpoint",
+        "summary": "get-smsc-v1.0-submit",
+        "operationId": "get-smsc-v1.0-submit",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
+            "schema": {
+              "$ref": "#/definitions/submitInfo"
+            },
+            "examples": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubmitInfo"
-                },
-                "examples": {
-                  "example-1": {
-                    "value": {
-                      "MessageReference": "string",
-                      "scts": "string",
-                      "Source": "string",
-                      "Destination": "string",
-                      "SenderId": "string",
-                      "DCS": 0,
-                      "ContentLength": "string",
-                      "Validity": "string",
-                      "Type": 0,
-                      "DSR": true,
-                      "IMSI": "string",
-                      "VMSC": "string",
-                      "ConcatInfo": "string",
-                      "ProtocolId": "string",
-                      "Priority": "string"
-                    }
-                  }
-                }
+                "MessageReference": "string",
+                "scts": "string",
+                "Source": "string",
+                "Destination": "string",
+                "SenderId": "string",
+                "DCS": 0,
+                "ContentLength": "string",
+                "Validity": "string",
+                "Type": 0,
+                "DSR": true,
+                "IMSI": "string",
+                "VMSC": "string",
+                "ConcatInfo": "string",
+                "ProtocolId": "string",
+                "Priority": "string"
               }
-            }
+            },
+            "headers": {}
           }
         },
-        "operationId": "get-smsc-v1.0-submit",
         "security": [
           {
             "SMSC-Basic-Authorization": []
           }
         ]
-      },
-      "parameters": []
+      }
     },
     "/smsc/v1.0/getSmsInfo": {
       "get": {
-        "summary": "Your GET endpoint",
-        "tags": [],
+        "description": "Your GET endpoint",
+        "summary": "get-smsc-v1.0-sms",
+        "operationId": "get-smsc-v1.0-sms",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "messageReference",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "MessageReference received from getSubmitInfo"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
+            "schema": {
+              "$ref": "#/definitions/smsInfo"
+            },
+            "examples": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SmsInfo"
-                },
-                "examples": {
-                  "example-1": {
-                    "value": {
-                      "MessageReference": "string",
-                      "scts": "string",
-                      "Source": "string",
-                      "Destination": "string",
-                      "DCS": 0,
-                      "Content": "string"
-                    }
-                  }
-                }
+                "MessageReference": "string",
+                "scts": "string",
+                "Source": "string",
+                "Destination": "string",
+                "DCS": 0,
+                "Content": "string"
               }
-            }
+            },
+            "headers": {}
           }
         },
-        "operationId": "get-smsc-v1.0-sms",
         "security": [
           {
             "SMSC-Basic-Authorization": []
           }
-        ],
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "query",
-            "name": "messageReference",
-            "description": "MessageReference received from getSubmitInfo"
-          }
         ]
-      },
-      "parameters": []
+      }
     },
     "/smsc/v1.0/getDeliverInfo": {
       "get": {
-        "summary": "Your GET endpoint",
-        "tags": [],
+        "description": "Your GET endpoint",
+        "summary": "get-smsc-v1.0-sms1",
+        "operationId": "get-smsc-v1.0-sms1",
+        "deprecated": false,
+        "produces": [
+          "application/json",
+          "application/xml",
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "messageReference",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "MessageReference received from getSubmitInfo"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
+            "schema": {
+              "$ref": "#/definitions/SmscV10GetDeliverInfoResponse"
+            },
+            "examples": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "submitInfo": {
-                      "$ref": "#/components/schemas/SubmitInfo"
-                    },
-                    "deliverDetails": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/DeliverInfo"
-                      }
-                    }
-                  }
+                "submitInfo": {
+                  "MessageReference": "string",
+                  "scts": "string",
+                  "Source": "string",
+                  "Destination": "string",
+                  "SenderId": "string",
+                  "DCS": 0,
+                  "ContentLength": "string",
+                  "Validity": "string",
+                  "Type": 0,
+                  "DSR": true,
+                  "IMSI": "string",
+                  "VMSC": "string",
+                  "ConcatInfo": "string",
+                  "ProtocolId": "string",
+                  "Priority": "string"
                 },
-                "examples": {
-                  "example-1": {
-                    "value": {
-                      "submitInfo": {
-                        "MessageReference": "string",
-                        "scts": "string",
-                        "Source": "string",
-                        "Destination": "string",
-                        "SenderId": "string",
-                        "DCS": 0,
-                        "ContentLength": "string",
-                        "Validity": "string",
-                        "Type": 0,
-                        "DSR": true,
-                        "IMSI": "string",
-                        "VMSC": "string",
-                        "ConcatInfo": "string",
-                        "ProtocolId": "string",
-                        "Priority": "string"
-                      },
-                      "deliverDetails": [
-                        {
-                          "MessageReference": "string",
-                          "scts": "string",
-                          "Source": "string",
-                          "Destination": "string",
-                          "DCS": 0,
-                          "ContentLength": "string",
-                          "Validity": "string"
-                        }
-                      ]
-                    }
+                "deliverDetails": [
+                  {
+                    "MessageReference": "string",
+                    "scts": "string",
+                    "Source": "string",
+                    "Destination": "string",
+                    "DCS": 0,
+                    "ContentLength": "string",
+                    "Validity": "string"
                   }
-                }
+                ]
               },
               "application/xml": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "submitInfo": {
-                      "$ref": "#/components/schemas/SubmitInfo"
-                    },
-                    "deliverInfo": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/DeliverInfo"
-                      }
-                    }
-                  }
+                "submitInfo": {
+                  "MessageReference": "string",
+                  "scts": "string",
+                  "Source": "string",
+                  "Destination": "string",
+                  "SenderId": "string",
+                  "DCS": 0,
+                  "ContentLength": "string",
+                  "Validity": "string",
+                  "Type": 0,
+                  "DSR": true,
+                  "IMSI": "string",
+                  "VMSC": "string",
+                  "ConcatInfo": "string",
+                  "ProtocolId": "string",
+                  "Priority": "string"
                 },
-                "examples": {}
+                "deliverDetails": [
+                  {
+                    "MessageReference": "string",
+                    "scts": "string",
+                    "Source": "string",
+                    "Destination": "string",
+                    "DCS": 0,
+                    "ContentLength": "string",
+                    "Validity": "string"
+                  }
+                ]
               },
               "multipart/form-data": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "submitInfo": {
-                      "$ref": "#/components/schemas/SubmitInfo"
-                    },
-                    "deliverInfo": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/DeliverInfo"
-                      }
-                    }
-                  }
+                "submitInfo": {
+                  "MessageReference": "string",
+                  "scts": "string",
+                  "Source": "string",
+                  "Destination": "string",
+                  "SenderId": "string",
+                  "DCS": 0,
+                  "ContentLength": "string",
+                  "Validity": "string",
+                  "Type": 0,
+                  "DSR": true,
+                  "IMSI": "string",
+                  "VMSC": "string",
+                  "ConcatInfo": "string",
+                  "ProtocolId": "string",
+                  "Priority": "string"
                 },
-                "examples": {
-                  "example-1": {
-                    "value": {
-                      "submitInfo": {
-                        "MessageReference": "string",
-                        "scts": "string",
-                        "Source": "string",
-                        "Destination": "string",
-                        "SenderId": "string",
-                        "DCS": 0,
-                        "ContentLength": "string",
-                        "Validity": "string",
-                        "Type": 0,
-                        "DSR": true,
-                        "IMSI": "string",
-                        "VMSC": "string",
-                        "ConcatInfo": "string",
-                        "ProtocolId": "string",
-                        "Priority": "string"
-                      },
-                      "deliverInfo": [
-                        {
-                          "MessageReference": "string",
-                          "scts": "string",
-                          "Source": "string",
-                          "Destination": "string",
-                          "DCS": 0,
-                          "ContentLength": "string",
-                          "Validity": "string"
-                        }
-                      ]
-                    }
+                "deliverDetails": [
+                  {
+                    "MessageReference": "string",
+                    "scts": "string",
+                    "Source": "string",
+                    "Destination": "string",
+                    "DCS": 0,
+                    "ContentLength": "string",
+                    "Validity": "string"
                   }
-                }
+                ]
               }
-            }
+            },
+            "headers": {}
           }
         },
-        "operationId": "get-smsc-v1.0-sms",
         "security": [
           {
             "SMSC-Basic-Authorization": []
           }
-        ],
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "query",
-            "name": "messageReference",
-            "description": "MessageReference received from getSubmitInfo"
-          }
         ]
-      },
-      "parameters": []
+      }
     }
   },
-  "components": {
-    "schemas": {
-      "DeliverInfo": {
-        "title": "deliverInfo",
-        "x-stoplight": {
-          "id": "gfl1csv9bmwwo"
+  "definitions": {
+    "deliverInfo": {
+      "title": "deliverInfo",
+      "description": "Details of SMS delivery Attempts for the requested message reference",
+      "example": {
+        "MessageReference": "string",
+        "scts": "string",
+        "Source": "string",
+        "Destination": "string",
+        "DCS": 0,
+        "ContentLength": "string",
+        "Validity": "string"
+      },
+      "type": "object",
+      "properties": {
+        "Attempt": {
+          "type": "integer",
+          "format": "int32"
         },
-        "type": "object",
-        "description": "Details of SMS delivery Attempts for the requested message reference",
-        "examples": [
-          {
-            "MessageReference": "string",
-            "scts": "string",
-            "Source": "string",
-            "Destination": "string",
-            "DCS": 0,
-            "ContentLength": "string",
-            "Validity": "string"
-          }
-        ],
-        "properties": {
-          "Attempt": {
-            "type": "integer"
-          },
-          "Time": {
-            "type": "string",
-            "description": "Format \"yyyy-MM-dd HH:mm:ss\""
-          },
-          "destIMSI": {
-            "type": "string"
-          },
-          "destVMSC": {
-            "type": "string"
-          },
-          "Status": {
-            "type": "string"
-          },
-          "Reason": {
-            "type": "string"
-          }
+        "Time": {
+          "description": "Format \"yyyy-MM-dd HH:mm:ss\"",
+          "type": "string"
+        },
+        "destIMSI": {
+          "type": "string"
+        },
+        "destVMSC": {
+          "type": "string"
+        },
+        "Status": {
+          "type": "string"
+        },
+        "Reason": {
+          "type": "string"
         }
-      },
-      "SmsInfo": {
-        "title": "smsInfo",
-        "x-stoplight": {
-          "id": "e3t3ng9bwxa2w"
-        },
-        "type": "object",
-        "description": "Sms Content for the requested message reference",
-        "examples": [
-          {
-            "MessageReference": "string",
-            "scts": "string",
-            "Source": "string",
-            "Destination": "string",
-            "DCS": 0,
-            "Content": "string"
-          }
-        ],
-        "properties": {
-          "MessageReference": {
-            "type": "string"
-          },
-          "scts": {
-            "type": "string",
-            "description": "Format \"yyyy-MM-dd HH:mm:ss\""
-          },
-          "Source": {
-            "type": "string",
-            "minLength": 6,
-            "maxLength": 15
-          },
-          "Destination": {
-            "type": "string"
-          },
-          "DCS": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 255
-          },
-          "Content": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "MessageReference",
-          "scts",
-          "Source",
-          "Destination",
-          "DCS",
-          "Content"
-        ]
-      },
-      "SubmitInfo": {
-        "title": "submitInfo",
-        "x-stoplight": {
-          "id": "v7h2zy5tmrp82"
-        },
-        "type": "object",
-        "description": "Details of Messages submitted to SMSC",
-        "properties": {
-          "MessageReference": {
-            "type": "string"
-          },
-          "scts": {
-            "type": "string",
-            "description": "Format \"yyyy-MM-dd HH:mm:ss\""
-          },
-          "Source": {
-            "type": "string"
-          },
-          "Destination": {
-            "type": "string"
-          },
-          "SenderId": {
-            "type": "string"
-          },
-          "DCS": {
-            "type": "integer"
-          },
-          "ContentLength": {
-            "type": "string"
-          },
-          "Validity": {
-            "type": "string",
-            "description": "Format \"yyyy-MM-dd HH:mm:ss\""
-          },
-          "Type": {
-            "type": "integer"
-          },
-          "DSR": {
-            "type": "boolean"
-          },
-          "IMSI": {
-            "type": "string"
-          },
-          "VMSC": {
-            "type": "string"
-          },
-          "ConcatInfo": {
-            "type": "string"
-          },
-          "ProtocolId": {
-            "type": "string"
-          },
-          "Priority": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "MessageReference",
-          "scts",
-          "Source",
-          "Destination",
-          "SenderId",
-          "DCS",
-          "ContentLength",
-          "Validity",
-          "Type",
-          "DSR"
-        ],
-        "examples": [
-          {
-            "MessageReference": "string",
-            "scts": "string",
-            "Source": "string",
-            "Destination": "string",
-            "SenderId": "string",
-            "DCS": 0,
-            "ContentLength": "string",
-            "Validity": "string",
-            "Type": 0,
-            "DSR": true,
-            "IMSI": "string",
-            "VMSC": "string",
-            "ConcatInfo": "string",
-            "ProtocolId": "string",
-            "Priority": "string"
-          }
-        ]
       }
     },
-    "securitySchemes": {
-      "SMSC-Basic-Authorization": {
-        "type": "http",
-        "scheme": "basic"
+    "smsInfo": {
+      "title": "smsInfo",
+      "description": "Sms Content for the requested message reference",
+      "example": {
+        "MessageReference": "string",
+        "scts": "string",
+        "Source": "string",
+        "Destination": "string",
+        "DCS": 0,
+        "Content": "string"
+      },
+      "type": "object",
+      "properties": {
+        "MessageReference": {
+          "type": "string"
+        },
+        "scts": {
+          "description": "Format \"yyyy-MM-dd HH:mm:ss\"",
+          "type": "string"
+        },
+        "Source": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 15
+        },
+        "Destination": {
+          "type": "string"
+        },
+        "DCS": {
+          "type": "integer",
+          "minimum": 0.0,
+          "maximum": 255.0,
+          "format": "int32"
+        },
+        "Content": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "MessageReference",
+        "scts",
+        "Source",
+        "Destination",
+        "DCS",
+        "Content"
+      ]
+    },
+    "submitInfo": {
+      "title": "submitInfo",
+      "description": "Details of Messages submitted to SMSC",
+      "example": {
+        "MessageReference": "string",
+        "scts": "string",
+        "Source": "string",
+        "Destination": "string",
+        "SenderId": "string",
+        "DCS": 0,
+        "ContentLength": "string",
+        "Validity": "string",
+        "Type": 0,
+        "DSR": true,
+        "IMSI": "string",
+        "VMSC": "string",
+        "ConcatInfo": "string",
+        "ProtocolId": "string",
+        "Priority": "string"
+      },
+      "type": "object",
+      "properties": {
+        "MessageReference": {
+          "type": "string"
+        },
+        "scts": {
+          "description": "Format \"yyyy-MM-dd HH:mm:ss\"",
+          "type": "string"
+        },
+        "Source": {
+          "type": "string"
+        },
+        "Destination": {
+          "type": "string"
+        },
+        "SenderId": {
+          "type": "string"
+        },
+        "DCS": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ContentLength": {
+          "type": "string"
+        },
+        "Validity": {
+          "description": "Format \"yyyy-MM-dd HH:mm:ss\"",
+          "type": "string"
+        },
+        "Type": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "DSR": {
+          "type": "boolean"
+        },
+        "IMSI": {
+          "type": "string"
+        },
+        "VMSC": {
+          "type": "string"
+        },
+        "ConcatInfo": {
+          "type": "string"
+        },
+        "ProtocolId": {
+          "type": "string"
+        },
+        "Priority": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "MessageReference",
+        "scts",
+        "Source",
+        "Destination",
+        "SenderId",
+        "DCS",
+        "ContentLength",
+        "Validity",
+        "Type",
+        "DSR"
+      ]
+    },
+    "SmscV10GetDeliverInfoResponse": {
+      "title": "SmscV10GetDeliverInfoResponse",
+      "type": "object",
+      "properties": {
+        "submitInfo": {
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/definitions/submitInfo"
+            },
+            {
+              "description": "Details of Messages submitted to SMSC",
+              "example": {
+                "MessageReference": "string",
+                "scts": "string",
+                "Source": "string",
+                "Destination": "string",
+                "SenderId": "string",
+                "DCS": 0,
+                "ContentLength": "string",
+                "Validity": "string",
+                "Type": 0,
+                "DSR": true,
+                "IMSI": "string",
+                "VMSC": "string",
+                "ConcatInfo": "string",
+                "ProtocolId": "string",
+                "Priority": "string"
+              }
+            }
+          ]
+        },
+        "deliverDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/deliverInfo"
+          }
+        }
+      }
+    },
+    "SmscV10GetDeliverInfoResponse1": {
+      "title": "SmscV10GetDeliverInfoResponse1",
+      "type": "object",
+      "properties": {
+        "submitInfo": {
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/definitions/submitInfo"
+            },
+            {
+              "description": "Details of Messages submitted to SMSC",
+              "example": {
+                "MessageReference": "string",
+                "scts": "string",
+                "Source": "string",
+                "Destination": "string",
+                "SenderId": "string",
+                "DCS": 0,
+                "ContentLength": "string",
+                "Validity": "string",
+                "Type": 0,
+                "DSR": true,
+                "IMSI": "string",
+                "VMSC": "string",
+                "ConcatInfo": "string",
+                "ProtocolId": "string",
+                "Priority": "string"
+              }
+            }
+          ]
+        },
+        "deliverInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/deliverInfo"
+          }
+        }
       }
     }
-  }
+  },
+  "security": [],
+  "tags": []
 }
