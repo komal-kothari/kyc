@@ -47,27 +47,6 @@
                 "$ref": "#/definitions/submitInfo"
               }
             },
-            "examples": {
-              "application/json": [
-                {
-                  "MessageReference": "string",
-                  "scts": "string",
-                  "Source": "string",
-                  "Destination": "string",
-                  "SenderId": "string",
-                  "DCS": 0,
-                  "ContentLength": "string",
-                  "Validity": "string",
-                  "Type": 0,
-                  "DSR": true,
-                  "IMSI": "string",
-                  "VMSC": "string",
-                  "ConcatInfo": "string",
-                  "ProtocolId": "string",
-                  "Priority": "string"
-                }
-              ]
-            },
             "headers": {}
           }
         },
@@ -102,16 +81,6 @@
             "schema": {
               "$ref": "#/definitions/smsInfo"
             },
-            "examples": {
-              "application/json": {
-                "MessageReference": "string",
-                "scts": "string",
-                "Source": "string",
-                "Destination": "string",
-                "DCS": 0,
-                "Content": "string"
-              }
-            },
             "headers": {}
           }
         },
@@ -129,9 +98,7 @@
         "operationId": "get-smsc-v1.0-sms1",
         "deprecated": false,
         "produces": [
-          "application/json",
-          "application/xml",
-          "multipart/form-data"
+          "application/json"
         ],
         "parameters": [
           {
@@ -148,95 +115,6 @@
             "schema": {
               "$ref": "#/definitions/SmscV10TrackerGetDeliverInfoResponse"
             },
-            "examples": {
-              "application/json": {
-                "submitInfo": {
-                  "MessageReference": "string",
-                  "scts": "string",
-                  "Source": "string",
-                  "Destination": "string",
-                  "SenderId": "string",
-                  "DCS": 0,
-                  "ContentLength": "string",
-                  "Validity": "string",
-                  "Type": 0,
-                  "DSR": true,
-                  "IMSI": "string",
-                  "VMSC": "string",
-                  "ConcatInfo": "string",
-                  "ProtocolId": "string",
-                  "Priority": "string"
-                },
-                "deliverDetails": [
-                  {
-                    "Attempt": 0,
-                    "Time": "string",
-                    "destIMSI": "string",
-                    "destVMSC": "string",
-                    "Status": "string",
-                    "Reason": "string"
-                  }
-                ]
-              },
-              "application/xml": {
-                "submitInfo": {
-                  "MessageReference": "string",
-                  "scts": "string",
-                  "Source": "string",
-                  "Destination": "string",
-                  "SenderId": "string",
-                  "DCS": 0,
-                  "ContentLength": "string",
-                  "Validity": "string",
-                  "Type": 0,
-                  "DSR": true,
-                  "IMSI": "string",
-                  "VMSC": "string",
-                  "ConcatInfo": "string",
-                  "ProtocolId": "string",
-                  "Priority": "string"
-                },
-                "deliverDetails": [
-                  {
-                    "Attempt": 0,
-                    "Time": "string",
-                    "destIMSI": "string",
-                    "destVMSC": "string",
-                    "Status": "string",
-                    "Reason": "string"
-                  }
-                ]
-              },
-              "multipart/form-data": {
-                "submitInfo": {
-                  "MessageReference": "string",
-                  "scts": "string",
-                  "Source": "string",
-                  "Destination": "string",
-                  "SenderId": "string",
-                  "DCS": 0,
-                  "ContentLength": "string",
-                  "Validity": "string",
-                  "Type": 0,
-                  "DSR": true,
-                  "IMSI": "string",
-                  "VMSC": "string",
-                  "ConcatInfo": "string",
-                  "ProtocolId": "string",
-                  "Priority": "string"
-                },
-                "deliverDetails": [
-                  {
-                    "Attempt": 0,
-                    "Time": "string",
-                    "destIMSI": "string",
-                    "destVMSC": "string",
-                    "Status": "string",
-                    "Reason": "string"
-                  }
-                ]
-              }
-            },
             "headers": {}
           }
         },
@@ -252,14 +130,6 @@
     "deliverInfo": {
       "title": "deliverInfo",
       "description": "Details of SMS delivery Attempts for the requested message reference",
-      "example": {
-        "Attempt": 0,
-        "Time": "string",
-        "destIMSI": "string",
-        "destVMSC": "string",
-        "Status": "string",
-        "Reason": "string"
-      },
       "type": "object",
       "properties": {
         "Attempt": {
@@ -287,14 +157,6 @@
     "smsInfo": {
       "title": "smsInfo",
       "description": "Sms Content for the requested message reference",
-      "example": {
-        "MessageReference": "string",
-        "scts": "string",
-        "Source": "string",
-        "Destination": "string",
-        "DCS": 0,
-        "Content": "string"
-      },
       "type": "object",
       "properties": {
         "MessageReference": {
@@ -334,29 +196,12 @@
     "submitInfo": {
       "title": "submitInfo",
       "description": "Details of Messages submitted to SMSC",
-      "example": {
-        "MessageReference": "string",
-        "scts": "string",
-        "Source": "string",
-        "Destination": "string",
-        "SenderId": "string",
-        "DCS": 0,
-        "ContentLength": "string",
-        "Validity": "string",
-        "Type": 0,
-        "DSR": true,
-        "IMSI": "string",
-        "VMSC": "string",
-        "ConcatInfo": "string",
-        "ProtocolId": "string",
-        "Priority": "string"
-      },
       "type": "object",
       "properties": {
         "MessageReference": {
           "type": "string"
         },
-        "scts": {
+        "SCTS": {
           "description": "Format \"yyyy-MM-dd HH:mm:ss\"",
           "type": "string"
         },
@@ -405,7 +250,7 @@
       },
       "required": [
         "MessageReference",
-        "scts",
+        "SCTS",
         "Source",
         "Destination",
         "SenderId",
@@ -427,68 +272,11 @@
               "$ref": "#/definitions/submitInfo"
             },
             {
-              "description": "Details of Messages submitted to SMSC",
-              "example": {
-                "MessageReference": "string",
-                "scts": "string",
-                "Source": "string",
-                "Destination": "string",
-                "SenderId": "string",
-                "DCS": 0,
-                "ContentLength": "string",
-                "Validity": "string",
-                "Type": 0,
-                "DSR": true,
-                "IMSI": "string",
-                "VMSC": "string",
-                "ConcatInfo": "string",
-                "ProtocolId": "string",
-                "Priority": "string"
-              }
+              "description": "Details of Messages submitted to SMSC"
             }
           ]
         },
         "deliverDetails": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/deliverInfo"
-          }
-        }
-      }
-    },
-    "SmscV10TrackerGetDeliverInfoResponse1": {
-      "title": "SmscV10TrackerGetDeliverInfoResponse1",
-      "type": "object",
-      "properties": {
-        "submitInfo": {
-          "type": "object",
-          "allOf": [
-            {
-              "$ref": "#/definitions/submitInfo"
-            },
-            {
-              "description": "Details of Messages submitted to SMSC",
-              "example": {
-                "MessageReference": "string",
-                "scts": "string",
-                "Source": "string",
-                "Destination": "string",
-                "SenderId": "string",
-                "DCS": 0,
-                "ContentLength": "string",
-                "Validity": "string",
-                "Type": 0,
-                "DSR": true,
-                "IMSI": "string",
-                "VMSC": "string",
-                "ConcatInfo": "string",
-                "ProtocolId": "string",
-                "Priority": "string"
-              }
-            }
-          ]
-        },
-        "deliverInfo": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/deliverInfo"
