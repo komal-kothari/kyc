@@ -27,7 +27,7 @@
     "application/json"
   ],
   "paths": {
-    "/smsc/v1.0/getSubmitInfo": {
+    "/smsc/v1.0/tracker/getSubmitInfo": {
       "get": {
         "description": "Your GET endpoint",
         "summary": "get-smsc-v1.0-submit",
@@ -41,26 +41,32 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/submitInfo"
+              "type": "array",
+              "default": "",
+              "items": {
+                "$ref": "#/definitions/submitInfo"
+              }
             },
             "examples": {
-              "application/json": {
-                "MessageReference": "string",
-                "scts": "string",
-                "Source": "string",
-                "Destination": "string",
-                "SenderId": "string",
-                "DCS": 0,
-                "ContentLength": "string",
-                "Validity": "string",
-                "Type": 0,
-                "DSR": true,
-                "IMSI": "string",
-                "VMSC": "string",
-                "ConcatInfo": "string",
-                "ProtocolId": "string",
-                "Priority": "string"
-              }
+              "application/json": [
+                {
+                  "MessageReference": "string",
+                  "scts": "string",
+                  "Source": "string",
+                  "Destination": "string",
+                  "SenderId": "string",
+                  "DCS": 0,
+                  "ContentLength": "string",
+                  "Validity": "string",
+                  "Type": 0,
+                  "DSR": true,
+                  "IMSI": "string",
+                  "VMSC": "string",
+                  "ConcatInfo": "string",
+                  "ProtocolId": "string",
+                  "Priority": "string"
+                }
+              ]
             },
             "headers": {}
           }
@@ -72,7 +78,7 @@
         ]
       }
     },
-    "/smsc/v1.0/getSmsInfo": {
+    "/smsc/v1.0/tracker/getSmsInfo": {
       "get": {
         "description": "Your GET endpoint",
         "summary": "get-smsc-v1.0-sms",
@@ -116,7 +122,7 @@
         ]
       }
     },
-    "/smsc/v1.0/getDeliverInfo": {
+    "/smsc/v1.0/tracker/getDeliverInfo": {
       "get": {
         "description": "Your GET endpoint",
         "summary": "get-smsc-v1.0-sms1",
@@ -140,7 +146,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/SmscV10GetDeliverInfoResponse"
+              "$ref": "#/definitions/SmscV10TrackerGetDeliverInfoResponse"
             },
             "examples": {
               "application/json": {
@@ -163,13 +169,12 @@
                 },
                 "deliverDetails": [
                   {
-                    "MessageReference": "string",
-                    "scts": "string",
-                    "Source": "string",
-                    "Destination": "string",
-                    "DCS": 0,
-                    "ContentLength": "string",
-                    "Validity": "string"
+                    "Attempt": 0,
+                    "Time": "string",
+                    "destIMSI": "string",
+                    "destVMSC": "string",
+                    "Status": "string",
+                    "Reason": "string"
                   }
                 ]
               },
@@ -193,13 +198,12 @@
                 },
                 "deliverDetails": [
                   {
-                    "MessageReference": "string",
-                    "scts": "string",
-                    "Source": "string",
-                    "Destination": "string",
-                    "DCS": 0,
-                    "ContentLength": "string",
-                    "Validity": "string"
+                    "Attempt": 0,
+                    "Time": "string",
+                    "destIMSI": "string",
+                    "destVMSC": "string",
+                    "Status": "string",
+                    "Reason": "string"
                   }
                 ]
               },
@@ -223,13 +227,12 @@
                 },
                 "deliverDetails": [
                   {
-                    "MessageReference": "string",
-                    "scts": "string",
-                    "Source": "string",
-                    "Destination": "string",
-                    "DCS": 0,
-                    "ContentLength": "string",
-                    "Validity": "string"
+                    "Attempt": 0,
+                    "Time": "string",
+                    "destIMSI": "string",
+                    "destVMSC": "string",
+                    "Status": "string",
+                    "Reason": "string"
                   }
                 ]
               }
@@ -250,13 +253,12 @@
       "title": "deliverInfo",
       "description": "Details of SMS delivery Attempts for the requested message reference",
       "example": {
-        "MessageReference": "string",
-        "scts": "string",
-        "Source": "string",
-        "Destination": "string",
-        "DCS": 0,
-        "ContentLength": "string",
-        "Validity": "string"
+        "Attempt": 0,
+        "Time": "string",
+        "destIMSI": "string",
+        "destVMSC": "string",
+        "Status": "string",
+        "Reason": "string"
       },
       "type": "object",
       "properties": {
@@ -414,8 +416,8 @@
         "DSR"
       ]
     },
-    "SmscV10GetDeliverInfoResponse": {
-      "title": "SmscV10GetDeliverInfoResponse",
+    "SmscV10TrackerGetDeliverInfoResponse": {
+      "title": "SmscV10TrackerGetDeliverInfoResponse",
       "type": "object",
       "properties": {
         "submitInfo": {
@@ -454,8 +456,8 @@
         }
       }
     },
-    "SmscV10GetDeliverInfoResponse1": {
-      "title": "SmscV10GetDeliverInfoResponse1",
+    "SmscV10TrackerGetDeliverInfoResponse1": {
+      "title": "SmscV10TrackerGetDeliverInfoResponse1",
       "type": "object",
       "properties": {
         "submitInfo": {
