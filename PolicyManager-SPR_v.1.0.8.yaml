@@ -2346,8 +2346,8 @@ components:
       description: Request for updated data in Response. For Create, Update API requests, Get Operation Response will be included if this parameter is set true
   responses: {}
 tags:
-  - name: Device Info
-  - name: Package Details
   - name: SPR
   - name: Subscriber Profile
+  - name: Device Info
+  - name: Package Details
   - name: Usage Monitoring
