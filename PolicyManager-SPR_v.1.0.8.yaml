@@ -1,1431 +1,120 @@
-openapi: 3.0.1
+openapi: 3.0.3
+x-stoplight:
+  id: zn30yomyxptdy
 info:
-  title: OpenAPI definition
+  title: Policy Manage SPR
   version: 1.0.8
+  description: Subscriber Profile Repository APIs to manage the SPR (CRUD operations for Subscriber Profile)
+  contact:
+    name: Tayana Mobility Technologies
+    url: http://www.tayanamobility.com
+    email: sast@tayana.in
+  license:
+    name: Tayana Proprietary License
+    url: http://www.tayanamobility.com/license
 servers:
-  - url: http://localhost:3002
+  - url: http://localhost:3000
     description: Example Server URL
 paths:
   /spr/v1.0/subscriber:
-    get:
-      tags:
-        - spr-api-controller
-      operationId: sprGetSubscriberForUser
-      parameters:
-        - name: userName
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
+    post:
+      summary: Create Subscriber Profile
+      operationId: SprCreateSubscriber
       responses:
         '200':
-          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetSubscriberResponse'
-        '400':
-          description: Bad Request
+                $ref: '#/components/schemas/CreateSubscriberResponse'
+          description: OK
+        '201':
           content:
-            '*/*':
+            application/json:
               schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    post:
-      tags:
-        - spr-api-controller
-      operationId: sprCreateSubscriber
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
+                $ref: '#/components/schemas/CreateSubscriberResponse'
+          description: Created
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Bad Request
+        '401':
+          description: Unauthorized
+      description: 'SPR Subscriber Profile Creation, '
+      security:
+        - SPR-Basic-Authorization: []
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SubscriberProfile'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateSubscriberResponse'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-  /spr/v1.0/subscriber/{serviceNumber}/userIdentity:
-    get:
-      tags:
-        - spr-api-controller
-      operationId: sprGetSubscriberIdentities
+        description: Subscriber Profile Data Model containing both Static and Dynamic Subscriber Profile
       parameters:
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriberIdentityRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    post:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
       tags:
-        - spr-api-controller
-      operationId: sprCreateSubscriberIdentity
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: getAll
-          in: query
-          required: false
-          schema:
-            type: boolean
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserIdentityReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriberIdentityRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    delete:
-      tags:
-        - spr-api-controller
-      operationId: sprDeleteSubscriberIdentity
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserIdentityReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericApiResponse'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-  /spr/v1.0/subscriber/{serviceNumber}/usageMonitoringInfo:
-    get:
-      tags:
-        - spr-api-controller
-      operationId: sprGetUsageMonitoringInfo
-      parameters:
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetUsageMonCounterRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    post:
-      tags:
-        - spr-api-controller
-      operationId: sprCreateUsageMonitoringInfo
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: getAll
-          in: query
-          required: false
-          schema:
-            type: boolean
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UsageMonCounterReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetUsageMonCounterRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    delete:
-      tags:
-        - spr-api-controller
-      operationId: sprDeleteUsageMonitoringInfo
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UsageMonCounterReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericApiResponse'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    patch:
-      tags:
-        - spr-api-controller
-      operationId: sprUpdateUsageMonitoringInfo
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: getAll
-          in: query
-          required: false
-          schema:
-            type: boolean
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UsageMonCounterReq'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/UsageMonCounterReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetUsageMonCounterRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-  /spr/v1.0/subscriber/{serviceNumber}/ueIP:
-    get:
-      tags:
-        - spr-api-controller
-      operationId: sprGetSubscriberUeIP
-      parameters:
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetAllocateUEIPRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    post:
-      tags:
-        - spr-api-controller
-      operationId: sprCreateSubscriberUeIP
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: getAll
-          in: query
-          required: false
-          schema:
-            type: boolean
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AllocateUEIPReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetAllocateUEIPRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    delete:
-      tags:
-        - spr-api-controller
-      operationId: sprDeleteSubscriberUeIP
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AllocateUEIPReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericApiResponse'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-  /spr/v1.0/subscriber/{serviceNumber}/subsPolicies:
-    get:
-      tags:
-        - spr-api-controller
-      operationId: sprGetSubscriberPolicies
-      parameters:
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriberPolicyRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    post:
-      tags:
-        - spr-api-controller
-      operationId: sprCreateSubscriberPolicies
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: getAll
-          in: query
-          required: false
-          schema:
-            type: boolean
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubsPoliciesReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriberPolicyRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    delete:
-      tags:
-        - spr-api-controller
-      operationId: sprDeleteSubscriberPolicies
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubsPoliciesReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericApiResponse'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    patch:
-      tags:
-        - spr-api-controller
-      operationId: sprUpdateSubscriberPolicies
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: getAll
-          in: query
-          required: false
-          schema:
-            type: boolean
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubsPoliciesReq'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/SubsPoliciesReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriberPolicyRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-  /spr/v1.0/subscriber/{serviceNumber}/services:
-    get:
-      tags:
-        - spr-api-controller
-      operationId: sprGetSubscriberServices
-      parameters:
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetAllowedServicesRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    post:
-      tags:
-        - spr-api-controller
-      operationId: sprCreateSubscriberServices
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: getAll
-          in: query
-          required: false
-          schema:
-            type: boolean
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AllowedServicesReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetAllowedServicesRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    delete:
-      tags:
-        - spr-api-controller
-      operationId: sprDeleteSubscriberServices
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AllowedServicesReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericApiResponse'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-  /spr/v1.0/subscriber/{serviceNumber}/package:
-    get:
-      tags:
-        - spr-api-controller
-      operationId: sprGetSubscriberPackage
-      parameters:
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriberPackageRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    post:
-      tags:
-        - spr-api-controller
-      operationId: sprAddSubscriberPackage
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: getAll
-          in: query
-          required: false
-          schema:
-            type: boolean
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubsPackageReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriberPackageRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    delete:
-      tags:
-        - spr-api-controller
-      operationId: sprDeleteSubscriberPackage
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubsPackageReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericApiResponse'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    patch:
-      tags:
-        - spr-api-controller
-      operationId: sprUpdateSubscriberPackage
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: getAll
-          in: query
-          required: false
-          schema:
-            type: boolean
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubsPackageReq'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/SubsPackageReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriberPackageRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-  /spr/v1.0/subscriber/{serviceNumber}/mac:
-    get:
-      tags:
-        - spr-api-controller
-      operationId: sprGetSubscriberMac
-      parameters:
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriberMacIdsRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    post:
-      tags:
-        - spr-api-controller
-      operationId: sprCreateSubscriberMac
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: getAll
-          in: query
-          required: false
-          schema:
-            type: boolean
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MacIdsReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriberMacIdsRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    delete:
-      tags:
-        - spr-api-controller
-      operationId: sprDeleteSubscriberMac
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MacIdsReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericApiResponse'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-  /spr/v1.0/subscriber/{serviceNumber}/group:
-    get:
-      tags:
-        - spr-api-controller
-      operationId: sprGetSubscriberGroup
-      parameters:
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriberGroupRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    post:
-      tags:
-        - spr-api-controller
-      operationId: sprCreateSubscriberGroup
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: getAll
-          in: query
-          required: false
-          schema:
-            type: boolean
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubscriberGroupReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSubscriberGroupRsp'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    delete:
-      tags:
-        - spr-api-controller
-      operationId: sprDeleteSubscriberGroup
-      parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubscriberGroupReq'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenericApiResponse'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
+        - Subscriber Profile
   /spr/v1.0/subscriber/{serviceNumber}:
+    parameters:
+      - $ref: '#/components/parameters/serviceNumber'
     get:
-      tags:
-        - spr-api-controller
-      operationId: sprGetSubscriber
-      parameters:
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
+      summary: Retrieve Subscriber Profile
       responses:
         '200':
-          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetSubscriberResponse'
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    delete:
-      tags:
-        - spr-api-controller
-      operationId: sprDeleteSubscriber
-      parameters:
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
           description: OK
+        '400':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenericApiResponse'
-        '400':
           description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
           content:
-            '*/*':
+            application/json:
               schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-    patch:
-      tags:
-        - spr-api-controller
-      operationId: sprUpdateSubscriber
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: SprGetSubscriber
+      description: Retrieve Subscriber Profile based on Service Number
+      security:
+        - SPR-Basic-Authorization: []
       parameters:
-        - name: AppRefId
-          in: query
-          required: true
-          schema:
-            maxLength: 50
-            minLength: 1
-            type: string
-        - name: serviceNumber
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: AppId
-          in: query
-          required: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      tags:
+        - Subscriber Profile
+    patch:
+      summary: Update Subscriber Profile
+      operationId: SprUpdateSubscriber
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSubscriberResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: ''
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      description: Update Subscriber Profile based on Service Number
+      security:
+        - SPR-Basic-Authorization: []
       requestBody:
         content:
           application/json:
@@ -1433,376 +122,1818 @@ paths:
               $ref: '#/components/schemas/SubscriberProfile'
           application/xml:
             schema:
-              $ref: '#/components/schemas/SubscriberProfile'
+              type: object
+              properties: {}
+        description: ''
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      tags:
+        - Subscriber Profile
+    delete:
+      summary: Delete Subscriber Profile
+      operationId: SprDeleteSubscriber
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Delete Subscriber Profile based on Service Number
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      tags:
+        - Subscriber Profile
+  /spr/v1.0/subscriber/{serviceNumber}/usageMonitoringInfo:
+    parameters:
+      - name: serviceNumber
+        in: path
         required: true
+        schema:
+          type: string
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+    get:
+      summary: Create Subscriber Usage monitoring information
+      operationId: SprGetUsageMonitoringInfo
+      description: Retrieve Subscriber Usage monitoring information
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateSubscriberResponse'
+                $ref: '#/components/schemas/GetUsageMonCounterRsp'
         '400':
           description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-  /spr/refresh:
-    patch:
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
       tags:
-        - spr-api-controller
-      operationId: refresh
+        - Usage Monitoring
+    patch:
+      summary: Update Subscriber Usage Monitoring Counter Information
+      operationId: SprUpdateUsageMonitoringInfo
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUsageMonCounterRsp'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: ''
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      description: Update Subscriber's Usage Monitoring Counter Information based on usage monitoring key given in the request
+      security:
+        - SPR-Basic-Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsageMonCounterReq'
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: ''
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/getAll'
+      tags:
+        - Usage Monitoring
+    delete:
+      summary: Delete Subscriber Usage Monitoring Counter Information
+      operationId: SprDeleteUsageMonitoringInfo
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Deletes all the requested Usage Moniotring Counter Infomation based on MonKey
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsageMonCounterReq'
+            examples:
+              Example 1:
+                value:
+                  usageCounter:
+                    - monitoringKey: key1
+                    - monitoringKey: key2
+        description: Delete Usage Monitoring Counter Req
+      tags:
+        - Usage Monitoring
+    post:
+      summary: Create Subscriber Usage monitoring information
+      operationId: SprCreateUsageMonitoringInfo
       responses:
         '200':
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/GetUsageMonCounterRsp'
         '400':
           description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-  /refresh:
-    patch:
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      description: Create Subscriber Usage monitoring information
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/getAll'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsageMonCounterReq'
       tags:
-        - api-controller
-      operationId: refresh_1
-      responses:
-        '200':
-          description: OK
-          content:
-            '*/*':
-              schema:
-                type: string
-        '400':
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
-  /info:
+        - Usage Monitoring
+  /spr/v1.0/subscriber/{serviceNumber}/subsPolicies:
+    parameters:
+      - name: serviceNumber
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
     get:
-      tags:
-        - api-controller
-      operationId: info
+      summary: Get Subscriber Policies
+      operationId: SprGetSubscriberPolicies
+      description: Retrieve Subscriber Policies Provisioned.
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
       responses:
         '200':
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/GetSubscriberPolicyRsp'
         '400':
           description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      tags:
+        - Package Details
+    patch:
+      summary: Update Subscriber Policies
+      operationId: SprUpdateSubscriberPolicies
+      responses:
+        '200':
           content:
-            '*/*':
+            application/json:
               schema:
-                oneOf:
-                  - type: string
-                  - type: object
-                    additionalProperties:
-                      type: string
+                $ref: '#/components/schemas/GetSubscriberPolicyRsp'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: ''
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      description: Update Subscriber's Policies Information based on Polcy Id & name given in the request
+      security:
+        - SPR-Basic-Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubsPoliciesReq'
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: Usage Monitoring Counter Information Request
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/getAll'
+      tags:
+        - Package Details
+    delete:
+      summary: Delete Subscriber Policies
+      operationId: SprDeleteSubscriberPolicies
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Deletes all the requested Subscriber Policies basen Policy Id & Name
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubsPoliciesReq'
+      tags:
+        - Package Details
+    post:
+      summary: Create Subscriber Policies
+      operationId: SprCreateSubscriberPolicies
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriberPolicyRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      description: Create Subscriber Policies
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/getAll'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubsPoliciesReq'
+      tags:
+        - Package Details
+  /spr/v1.0/subscriber/{serviceNumber}/group:
+    parameters:
+      - name: serviceNumber
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+    get:
+      summary: Get Subscriber Group
+      operationId: SprGetSubscriberGroup
+      description: Retrieve Subscriber Group Information
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriberGroupRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      tags:
+        - Subscriber Profile
+    delete:
+      summary: Delete Subscriber Groups
+      operationId: SprDeleteSubscriberGroup
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Deletes all the requested Subscriber groups
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriberGroupReq'
+      tags:
+        - Subscriber Profile
+    post:
+      summary: Create Subscriber Group
+      operationId: SprCreateSubscriberGroup
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriberGroupRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      description: Create Subscriber group
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/getAll'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriberGroupReq'
+      tags:
+        - Subscriber Profile
+  /spr/v1.0/subscriber/{serviceNumber}/ueIP:
+    parameters:
+      - name: serviceNumber
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+    get:
+      summary: Get Subscriber UE IPs
+      operationId: SprGetSubscriberUeIP
+      description: Retrieve Subscriber User Equipment allocated IPs
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllocateUEIPRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      tags:
+        - Device Info
+    delete:
+      summary: Delete Subscriber UE IPs
+      operationId: SprDeleteSubscriberUeIP
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Deletes all the requested Subscriber User Equipment IPs
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllocateUEIPReq'
+      tags:
+        - Device Info
+    post:
+      summary: Create Subscriber UE IPs
+      operationId: SprCreateSubscriberUeIP
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllocateUEIPRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      description: Create Subscriber User Equipement IPs
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/getAll'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllocateUEIPReq'
+      tags:
+        - Device Info
+  /spr/v1.0/subscriber/{serviceNumber}/services:
+    parameters:
+      - name: serviceNumber
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+    get:
+      summary: Get Subscriber Services
+      operationId: SprGetSubscriberServices
+      description: Retrieve Subscriber list of Provisioned Services
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllowedServicesRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      tags:
+        - Subscriber Profile
+    delete:
+      summary: Delete Subscriber Services
+      operationId: SprDeleteSubscriberServices
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Deletes all the requested Subscriber Services
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllowedServicesReq'
+      tags:
+        - Subscriber Profile
+    post:
+      summary: Add Subscriber Services
+      operationId: SprCreateSubscriberServices
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllowedServicesRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      description: Add Subscriber Services
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/getAll'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllowedServicesReq'
+      tags:
+        - Subscriber Profile
+  /spr/v1.0/subscriber/{serviceNumber}/mac:
+    parameters:
+      - name: serviceNumber
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+    get:
+      summary: Get Subscriber MAC Addresses
+      operationId: SprGetSubscriberMac
+      description: Retrieve Subscriber Linked MAC Addresses
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriberMacIdsRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      tags:
+        - Device Info
+    delete:
+      summary: Delete Subscriber MAC Address
+      operationId: SprDeleteSubscriberMac
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Deletes all the requested MAC Addresses from Subscribers linked MAC address list
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MacIdsReq'
+      tags:
+        - Device Info
+    post:
+      summary: Create Subscriber MAC Address
+      operationId: SprCreateSubscriberMac
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriberMacIdsRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      description: Link MAC Addresses to the subscribers linked MAC address list
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/getAll'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MacIdsReq'
+      tags:
+        - Device Info
+  /spr/v1.0/subscriber/{serviceNumber}/userIdentity:
+    parameters:
+      - name: serviceNumber
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+    get:
+      summary: Get Subscriber User Identities
+      operationId: SprGetSubscriberIdentities
+      description: Retrieve Subscriber list of User Identities associated with the Subscriber
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriberIdentityRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      tags:
+        - Subscriber Profile
+    delete:
+      summary: Delete Subscriber Identity
+      operationId: SprDeleteSubscriberIdentity
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Deletes all the requested Subscriber Identities
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserIdentityReq'
+      tags:
+        - Subscriber Profile
+    post:
+      summary: Add Subscriber Identities
+      operationId: SprCreateSubscriberIdentity
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriberIdentityRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      description: Add Subscriber Identities
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/getAll'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserIdentityReq'
+      tags:
+        - Subscriber Profile
+  /spr/v1.0/subscriber/{serviceNumber}/package:
+    parameters:
+      - name: serviceNumber
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+    get:
+      summary: Get Subscriber Package Information
+      operationId: SprGetSubscriberPackage
+      description: Retrieve Subscribed Package Information.
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriberPackageRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      tags:
+        - Package Details
+    patch:
+      summary: Update Subscriber Package Information
+      operationId: SprUpdateSubscriberPackage
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriberPackageRsp'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: ''
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+      description: Update Subscriber's Package Information based on Package Id & name given in the request
+      security:
+        - SPR-Basic-Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubsPackageReq'
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: Usage Monitoring Counter Information Request
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/getAll'
+      tags:
+        - Package Details
+    delete:
+      summary: Delete Subscriber Packages
+      operationId: SprDeleteSubscriberPackage
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericApiResponse'
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Deletes all the requested Subscriber Packages based on Package Id & Name
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubsPackageReq'
+      tags:
+        - Package Details
+    post:
+      summary: Add Subscriber Package Information
+      operationId: SprAddSubscriberPackage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubscriberPackageRsp'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      description: Add Packages to the Subscriber Profile
+      security:
+        - SPR-Basic-Authorization: []
+      parameters:
+        - $ref: '#/components/parameters/AppRefId'
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/getAll'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubsPackageReq'
+        description: ''
+      tags:
+        - Package Details
+  /actuator/health:
+    get:
+      summary: Health Check
+      tags:
+        - Health Check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    x-stoplight:
+                      id: 5s30sjvzaqhb1
+                    enum:
+                      - UP
+                      - DOWN
+                    description: Policy Manager Service Status
+                required:
+                  - status
+      operationId: HealthStatus
 components:
   schemas:
-    AllocatedUEIP:
+    GetSubscriberPolicyRsp:
+      title: GetSubscriberPolicyRsp
       type: object
+      description: Retrieve Subscriber Provisioned Policies
+      properties:
+        response:
+          $ref: '#/components/schemas/GenericResponse'
+        subscriptionId:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Unique Subscription Id generated by SPR System
+        serviceNumber:
+          type: string
+          description: Service Number
+        subsPolicies:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyProfile'
+        reference:
+          type: string
+          format: uri
+      required:
+        - response
+      x-stoplight:
+        id: h5057989rgrxb
+    GetSubscriberIdentityRsp:
+      title: GetSubscriberIdentityRsp
+      type: object
+      description: Retrieve Subscriber Identities
+      x-stoplight:
+        id: q35unqe2z2g3d
+      properties:
+        response:
+          $ref: '#/components/schemas/GenericResponse'
+        subscriptionId:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Unique Subscription Id generated by SPR System
+        serviceNumber:
+          type: string
+          description: Service Number
+        identities:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserIdentity'
+        reference:
+          type: string
+          format: uri
+      required:
+        - response
+    GetSubscriberMacIdsRsp:
+      title: GetSubscriberIdentityRsp
+      type: object
+      description: Retrieve Subscriber Identities
+      x-stoplight:
+        id: 1m7qbou836eyk
+      properties:
+        response:
+          $ref: '#/components/schemas/GenericResponse'
+        subscriptionId:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Unique Subscription Id generated by SPR System
+        serviceNumber:
+          type: string
+          description: Service Number
+        macIds:
+          type: array
+          items:
+            type: string
+            pattern: ^[a-fA-F0-9]{2}((:[a-fA-F0-9]{2}){5}|(-[a-fA-F0-9]{2}){5})$
+        reference:
+          type: string
+          format: uri
+      required:
+        - response
+    GetSubscriberPackageRsp:
+      title: GetSubscriberPackageRsp
+      type: object
+      description: Retrieve Subscribed Package Information
+      properties:
+        response:
+          $ref: '#/components/schemas/GenericResponse'
+        subscriptionId:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Unique Subscription Id generated by SPR System
+        serviceNumber:
+          type: string
+          description: Service Number
+        packages:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackageInfo'
+        reference:
+          type: string
+          format: uri
+      required:
+        - response
+      x-stoplight:
+        id: md4ujnvkn5cox
+    GetSubscriberGroupRsp:
+      title: GetSubscriberGroupRsp
+      type: object
+      description: Retrieve Subscriber Groups
+      properties:
+        response:
+          $ref: '#/components/schemas/GenericResponse'
+        subscriptionId:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Unique Subscription Id generated by SPR System
+        serviceNumber:
+          type: string
+          description: Service Number
+        group:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+        reference:
+          type: string
+          format: uri
+      required:
+        - response
+      x-stoplight:
+        id: 7f6o0y1eatfpu
+    GetAllowedServicesRsp:
+      title: GetAllowedServicesRsp
+      type: object
+      description: Retrieve Subscriber lis to fallowed Services
+      properties:
+        response:
+          $ref: '#/components/schemas/GenericResponse'
+        subscriptionId:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Unique Subscription Id generated by SPR System
+        serviceNumber:
+          type: string
+          description: Service Number
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllowedServices'
+        reference:
+          type: string
+          format: uri
+      required:
+        - response
+      x-stoplight:
+        id: xteu3x7n2v41a
+    SubscriberGroupReq:
+      title: SubscriberGroupReq
+      type: object
+      description: Subscriber Groups Request for Create and Delete group API
+      properties:
+        group:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+      x-stoplight:
+        id: teylndiaeeqtb
+    GetUsageMonCounterRsp:
+      title: GetUsageMonCounterRsp
+      type: object
+      description: Retrieve Subscriber Usage monitoring counter information Response. SPR System will provide List of all the Usage Monitoring Infomration for a requested service number if the request status is success.
+      properties:
+        response:
+          $ref: '#/components/schemas/GenericResponse'
+        subscriptionId:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Unique Subscription Id generated by SPR System
+        serviceNumber:
+          type: string
+          description: Service Number
+        reference:
+          type: string
+          format: uri
+        usageMonCounter:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageMonitoringCounter'
+      required:
+        - response
+      x-stoplight:
+        id: 61nguqhjh01tc
+    CreateSubscriberResponse:
+      title: CreateSubscriberResponse
+      type: object
+      description: |-
+        Create Subscriber Response, SPR System will provide the Unique Subscription ID generated by SPR system along with the Service Number in case of successfull operation completion. 
+        SPR system may autogenerate the ServiceNumber for certain services, if this is not provided in the request.
+      properties:
+        response:
+          $ref: '#/components/schemas/GenericResponse'
+        subscriptionId:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Unique Subscription Id generated by SPR System
+        serviceNumber:
+          type: string
+          description: Service Number
+        reference:
+          type: string
+          format: uri
+      x-stoplight:
+        id: pup98jid6ud1m
+    GenericApiResponse:
+      title: GenericApiResponse
+      type: object
+      description: General API Response Schema
+      properties:
+        appTxnRefId:
+          type: string
+          minLength: 1
+          description: Application Transaction Reference Id received in request.
+          maxLength: 50
+        txnRefId:
+          type: string
+          minLength: 1
+          description: Transaction Reference Id generated by SPR Service for the request
+          maxLength: 50
+        status:
+          description: |-
+            Response status 
+            0 : SUCCESS
+            1 : FAILURE
+            2 : PARTIAL SUCCESS
+            3 : PENDING
+            4 : TIMEOUT
+          type: integer
+        errorCode:
+          type: integer
+          format: int32
+          description: Error Code in case of Failure
+        error:
+          type: array
+          description: Response Description, Usually describes the error code.
+          items:
+            type: string
+      required:
+        - appTxnRefId
+        - txnRefId
+        - status
+      x-stoplight:
+        id: psj19b2urys16
+    GetSubscriberResponse:
+      title: GetSubscriberResponse
+      type: object
+      properties:
+        response:
+          $ref: '#/components/schemas/GenericResponse'
+        subscriberProfile:
+          $ref: '#/components/schemas/SubscriberProfile'
+      x-stoplight:
+        id: tg9lrl8sdqix7
+    AllocatedUEIP:
+      title: AllocatedUEIP
+      x-stoplight:
+        id: vzjbac2tr3fsk
+      type: object
+      description: One of IPv4 or IPv6 address
       properties:
         allocationType:
-          maximum: 2
-          minimum: 1
           type: integer
-          format: int32
+          description: Ip allocation type 1 - static, 2 - Dynamic
+          minimum: 1
+          maximum: 2
         ipType:
-          maximum: 2
-          minimum: 1
           type: integer
-          format: int32
+          description: IP address Version Type 1-IpV4, 2-IpV6
+          minimum: 1
+          maximum: 2
         ipAddress:
           type: string
+          description: IP Address
         entryTime:
-          maxLength: 17
-          minLength: 17
           type: string
-    AllowedServices:
+          description: Time when the entry is made. Default will be sysdate. Format "yyyyMMdd HH:mm:ss"
+          minLength: 17
+          maxLength: 17
       required:
-        - serviceCode
+        - allocationType
+    AllowedServices:
+      title: AllowedServices
+      x-stoplight:
+        id: n2o63egfph1gb
       type: object
+      description: Subscriber allowed services
       properties:
         serviceCode:
-          maxLength: 15
+          type: string
           minLength: 1
-          type: string
+          maxLength: 15
         startDate:
+          type: string
+          description: If not mentioned then service is allowed. Format "yyyyMMdd HH:mm:ss"
           maxLength: 17
           minLength: 17
-          type: string
         endDate:
-          maxLength: 17
-          minLength: 17
           type: string
+          minLength: 17
+          maxLength: 17
+          description: Service End Date. Format "yyyyMMdd HH:mm:ss"
+      required:
+        - serviceCode
     DemographyDetail:
+      title: Demographic Information
+      x-stoplight:
+        id: j6fx77ahrl285
       type: object
+      description: Contains subscriber Demographic information
       properties:
         title:
-          pattern: ^(Mr\.|Mrs\.|Ms\.|Dr\.)$
           type: string
+          description: |-
+            Person Title, the options are as follows:
+            1: Mr.
+            2: Mrs.
+            3: Ms.                                                                                                     4: Dr.
+          minLength: 2
+          maxLength: 10
+          pattern: ^(Mr\\.|Mrs\\.|Ms\\.|Dr\\.)$
         firstName:
-          maxLength: 30
-          minLength: 2
-          pattern: ^[A-Za-z]+
           type: string
+          description: First Name of customer/subscriber
+          minLength: 2
+          maxLength: 30
+          pattern: ^[A-Za-z]+
         middleName:
-          maxLength: 30
-          minLength: 2
-          pattern: ^[A-Za-z]+
           type: string
+          description: Middle Name of customer/Subscriber
+          minLength: 2
+          maxLength: 30
+          pattern: ^[A-Za-z]+
         lastName:
-          maxLength: 30
+          type: string
+          description: Middle Name of customer/Subscriber
           minLength: 2
+          maxLength: 30
           pattern: ^[A-Za-z]+
-          type: string
         businessName:
-          maxLength: 30
-          minLength: 2
           type: string
+          description: Business Name of the organization applicable if customer type is Corporate.
+          minLength: 2
+          maxLength: 30
         dateOfBirth:
-          maxLength: 17
+          type: string
+          description: Date Of Birth or date of incorporation in case of companies (inyyyyMMdd HH:mm:ss)
           minLength: 17
-          type: string
+          maxLength: 17
         nationality:
+          type: string
+          description: Nationality of subscriber
+          minLength: 2
           maxLength: 30
-          minLength: 2
-          type: string
         occupation:
-          maxLength: 25
+          type: string
+          description: Occupation
           minLength: 2
-          type: string
+          maxLength: 25
         address1:
-          maxLength: 50
-          minLength: 1
           type: string
+          description: Address line 1
+          minLength: 1
+          maxLength: 50
         address2:
-          maxLength: 50
-          minLength: 1
           type: string
+          description: Address line 2
+          minLength: 1
+          maxLength: 50
         city:
           type: string
+          description: city
         state:
           type: string
+          description: state
         country:
-          maxLength: 30
+          type: string
+          description: Country Id indicates subscriber country
           minLength: 2
-          type: string
+          maxLength: 30
         zipCode:
+          type: string
+          minLength: 1
           maxLength: 10
-          minLength: 1
-          type: string
         contactNumber:
-          maxLength: 25
-          minLength: 1
-          pattern: ^[0-9]+
           type: string
+          description: Contact number for notification
+          minLength: 1
+          maxLength: 25
+          pattern: ^[0-9]+
         gender:
           type: string
+          description: |-
+            Gender 
+            1: MALE
+            2: FEMALE
+            3: TRANSGENDER
+            4: UNDISCLOSED
           enum:
             - MALE
             - FEMALE
             - TRANSGENDER
             - UNDISCLOSED
             - OTHERS
-            - 'null'
         alternateContactNum:
-          maxLength: 25
+          type: string
+          description: Alternate contact number
           minLength: 2
+          maxLength: 25
           pattern: ^[0-9]+
-          type: string
         emailId:
-          pattern: ^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$
           type: string
+          description: Mail Id for communication
+          pattern: ^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$
         altEmailId:
-          pattern: ^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$
           type: string
+          description: Alternate email Id
+          pattern: ^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$
         documents:
           type: array
           items:
             $ref: '#/components/schemas/Document'
     Document:
+      title: Document
+      x-stoplight:
+        id: tfdosjepzhp91
       type: object
+      description: Subscriber's KYC document information
       properties:
         type:
+          type: string
+          description: Document Type such as VoterId, Aadhar, Pan, Passport,etc
+          minLength: 2
           maxLength: 25
-          minLength: 2
-          type: string
         docNumber:
-          maxLength: 2147483647
-          minLength: 2
           type: string
+          description: subscriber identity number as per the documentType
+          minLength: 2
+      required:
+        - type
+        - docNumber
     DynamicProfile:
+      title: DynamicProfileData
+      x-stoplight:
+        id: l9wfgm7che4iw
       type: object
+      description: Dynamic Profile
       properties:
         currentLocation:
           $ref: '#/components/schemas/LocationInfo'
         packageInfo:
-          maxItems: 25
-          minItems: 0
           type: array
+          minItems: 0
+          maxItems: 25
           items:
             $ref: '#/components/schemas/PackageInfo'
         policyProfiles:
           type: array
+          description: Subscribed policy profiles
           items:
             $ref: '#/components/schemas/PolicyProfile'
         ueIP:
-          maxItems: 20
-          minItems: 0
           type: array
+          minItems: 0
+          maxItems: 20
           items:
             $ref: '#/components/schemas/AllocatedUEIP'
         usageMonCounter:
-          maxItems: 40
-          minItems: 0
           type: array
+          minItems: 0
+          maxItems: 40
           items:
             $ref: '#/components/schemas/UsageMonitoringCounter'
         group:
           type: array
           items:
             $ref: '#/components/schemas/Group'
-    Group:
+    GenericResponse:
+      description: General API Response Schema
       type: object
+      x-examples: {}
+      title: GenericResponse
+      properties:
+        appTxnRefId:
+          type: string
+          minLength: 1
+          description: Application Transaction Reference Id received in request.
+          maxLength: 50
+        txnRefId:
+          type: string
+          minLength: 1
+          description: Transaction Reference Id generated by SPR Service for the request
+          maxLength: 50
+        status:
+          description: |-
+            Response status 
+            0 : SUCCESS
+            1 : FAILURE
+            2 : PARTIAL SUCCESS
+            3 : PENDING
+            4 : TIMEOUT
+          type: integer
+        errorCode:
+          type: integer
+          format: int32
+          description: Error Code in case of Failure
+        error:
+          type: array
+          description: Response Description, Usually describes the error code.
+          items:
+            type: string
+      required:
+        - appTxnRefId
+        - txnRefId
+        - status
+      x-stoplight:
+        id: zzlzlmlxlmbzt
+    Group:
+      title: Group
+      x-stoplight:
+        id: l5ob73682lp9t
+      type: object
+      description: Subscribers group Information
       properties:
         groupId:
           type: integer
-          format: int32
+          description: Subscribers group Id to which He/She is part of
         groupName:
-          maxLength: 20
-          minLength: 1
           type: string
+          description: Subscribers group Name to which He/She is part of
+          minLength: 1
+          maxLength: 20
+      required:
+        - groupId
     LocationInfo:
+      title: LocationInfo
+      x-stoplight:
+        id: tgg61g6g3nd8w
+      type: object
+      description: Location information about subscribers UE
+      properties:
+        type:
+          type: string
+          description: CGI, SAI, RAI, TAI, ECGI, TAI_ECGI, CI, ECI, LAC, MCC,MNC,RAC,SAC,TAC
+          minLength: 2
+          maxLength: 10
+          pattern: ^(CGI|SAI|RAI|TAI|ECGI|TAI_ECGI|CI|ECI|LAC|MCC|MNC|RAC|SAC|TAC)$
+        value:
+          type: string
+          minLength: 1
+          maxLength: 15
       required:
         - type
         - value
-      type: object
-      properties:
-        type:
-          maxLength: 10
-          minLength: 2
-          pattern: ^(CGI|SAI|RAI|TAI|ECGI|TAI_ECGI|CI|ECI|LAC|MCC|MNC|RAC|SAC|TAC)$
-          type: string
-        value:
-          maxLength: 15
-          minLength: 1
-          type: string
     PackageInfo:
-      required:
-        - packageId
-        - packageName
+      title: PackageInfo
+      x-stoplight:
+        id: zilbwxagy8ysd
       type: object
+      description: Subscriber's Package Information subscribed.
       properties:
         packageId:
           type: integer
+          description: Package Identifier
           format: int64
         packageName:
-          maxLength: 50
+          type: string
           minLength: 1
-          type: string
+          maxLength: 50
         startDate:
-          maxLength: 17
-          minLength: 17
           type: string
+          minLength: 17
+          maxLength: 17
         endDate:
-          maxLength: 17
-          minLength: 17
           type: string
+          minLength: 17
+          maxLength: 17
         calenderId:
           type: integer
           format: int64
         nextStartTime:
-          maxLength: 17
-          minLength: 17
           type: string
+          minLength: 17
+          maxLength: 17
         nextStopTime:
-          maxLength: 17
-          minLength: 17
           type: string
+          minLength: 17
+          maxLength: 17
         policyProfiles:
           type: array
           items:
             $ref: '#/components/schemas/PolicyProfile'
+      required:
+        - packageId
+        - packageName
     PolicyProfile:
+      title: Policy Profile
+      x-stoplight:
+        id: bp09b0ltcip4h
       type: object
+      description: Policy Profiles infomration used for subscriber level and package level
       properties:
         policyId:
           type: integer
-          format: int32
+          description: 'Policy ID '
         policyName:
-          maxLength: 50
+          type: string
           minLength: 1
-          type: string
+          maxLength: 50
+          description: Policy Name
         startDate:
-          maxLength: 17
-          minLength: 17
           type: string
+          minLength: 17
+          maxLength: 17
         endDate:
-          maxLength: 17
-          minLength: 17
           type: string
+          minLength: 17
+          maxLength: 17
         calenderId:
           type: integer
-          format: int32
         nextStartTime:
-          maxLength: 17
-          minLength: 17
           type: string
+          minLength: 17
+          maxLength: 17
         nextStopTime:
-          maxLength: 17
-          minLength: 17
           type: string
-    QoS:
+          minLength: 17
+          maxLength: 17
       required:
-        - qosName
+        - policyId
+        - policyName
+    QoS:
+      title: QoS
+      x-stoplight:
+        id: g300z7wtb71ei
       type: object
+      description: Contains Information about Quality of Service parameters.
       properties:
         qosName:
-          maxLength: 25
-          minLength: 1
           type: string
+          minLength: 1
+          maxLength: 25
         qci:
+          type: integer
           maximum: 9
           minimum: 1
-          type: integer
-          format: int32
         ulMBR:
-          type: integer
-          format: int64
+          type: number
         dlMBR:
-          type: integer
-          format: int64
+          type: number
         arp:
           type: string
-    SubscriberProfile:
+          description: allocation and retention priority
       required:
-        - service
+        - qosName
+    SubscriberProfile:
+      title: SubscriberProfile
+      x-stoplight:
+        id: 20t5fzi8z4set
       type: object
+      description: Model contains definitions about the subscriber Profile information
+      x-examples:
+        Example 1:
+          service: MOBILE
+          serviceNumber: string
+          language: string
+          validityDate: '2019-08-24T14:15:22Z'
+          expiryDate: '2019-08-24T14:15:22Z'
+          userName: string
+          password: pa$$word
+          region: string
+          macBindFlag: 2
+          macIds:
+            - string
+          allowUnknownServices: true
+          imei: stringstringstr
+          subscriptionType: 0
+          tier: string
+          homeZone: string
+          cosId: 0
+          accountId: string
+          billingDay: 0
+          notificationMsisdn: string
+          adcFlag: 0
+          subscriberId: string
+          allowedServices:
+            - serviceCode: string
+              startDate: stringstringstrin
+              endDate: stringstringstrin
+          maxAllowedQoS:
+            qosName: string
+            qci: 0
+            ulMBR: 0
+            dlMBR: 0
+            arp: string
+          dynamicProfileData:
+            currentLocation:
+              type: string
+              value: string
+            packageInfo:
+              - packageId: 0
+                packageName: string
+                startDate: '2019-08-24T14:15:22Z'
+                endDate: '2019-08-24T14:15:22Z'
+                calenderId: 0
+                nextStartTime: '2019-08-24T14:15:22Z'
+                nextStopTime: '2019-08-24T14:15:22Z'
+                PolicyProfiles:
+                  - policyId: 0
+                    policyName: string
+                    startDate: '2019-08-24T14:15:22Z'
+                    endDate: '2019-08-24T14:15:22Z'
+                    calenderId: 0
+                    nextStartTime: '2019-08-24T14:15:22Z'
+                    nextStopTime: '2019-08-24T14:15:22Z'
+            policyProfiles:
+              - policyId: 0
+                policyName: string
+                startDate: '2019-08-24T14:15:22Z'
+                endDate: '2019-08-24T14:15:22Z'
+                calenderId: 0
+                nextStartTime: '2019-08-24T14:15:22Z'
+                nextStopTime: '2019-08-24T14:15:22Z'
+            ueIP:
+              - allocationType: 1
+                ipV4: 192.168.0.1
+                ipV6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+            usageMonCounter:
+              - monitoringKey: string
+                value: 0
+                monitoringLevel: 0
+                status: string
+                resetTime: '2019-08-24T14:15:22Z'
+            group:
+              - groupId: 0
+                groupName: string
+          subscriptionId:
+            - type: 0
+              value: string
+          demography:
+            title: string
+            firstName: string
+            middleName: string
+            lastName: string
+            businessName: string
+            dateOfBirth: '2019-08-24T14:15:22Z'
+            nationality: string
+            occupation: string
+            address1: string
+            address2: string
+            city: string
+            state: string
+            country: string
+            zipCode: string
+            contactNumber: string
+            gender: MALE
+            alternateContactNum: string
+            emailId: user@example.com
+            altEmailId: user@example.com
+            documents:
+              - type: string
+                docNumber: string
+          extendedInfo:
+            - {}
       properties:
         service:
           type: string
+          description: Service Domain to which subscriber belongs to (i.e. MOBILE/BROADBAND/WIFI/SATELLITE etc.)
           enum:
             - MOBILE
             - BROADBAND
@@ -1810,98 +1941,113 @@ components:
             - FIXEDLINE
             - SATELLITE
             - OTHER
-            - 'null'
         serviceNumber:
+          type: string
+          description: MSISDN in case of Mobile Service. Dummy Service Number/userName in case of broadband subscriber (to be used for Gy Session)
           maxLength: 25
           minLength: 0
-          type: string
         language:
-          maxLength: 10
+          type: string
+          description: |-
+            Subscriber's preferred language of communications.
+            Default is "ENG"
           minLength: 1
-          type: string
+          maxLength: 10
+          default: ENG
         validityDate:
+          type: string
+          description: Validity date for the subscriber in yyyyMMdd HH:mm:ss
           maxLength: 17
           minLength: 17
-          type: string
         expiryDate:
+          type: string
+          description: Expiry Date of the subscriber in yyyyMMdd HH:mm:ss(must be greater than sysdate as well as valDate).
           maxLength: 17
           minLength: 17
-          type: string
         userName:
+          type: string
+          description: 'User Name is applicable only for broadband subscriber  - Mandatory  for Broadband Subscriber '
           maxLength: 30
           minLength: 0
-          type: string
-        slcState:
-          pattern: ^(IDLE|ACTIVE|AWAIT_ACTIVATION|AWAIT_FIRST_ACTIVATION|SUSPENDED|DISABLED|RETIRED|EXPIRED|FRAUD_LOCKOUT|PENDING|BARRED|DEACTIVATED)$
-          type: string
         password:
           type: string
-        region:
-          maxLength: 20
+          description: Password is applicable only for broadband subscriber  - Mandatory  for Broadband Subscriber
+          format: password
           minLength: 1
+          maxLength: 30
+        region:
           type: string
-        paygEnabled:
-          type: boolean
+          description: Domain is applicable only for broadband subscriber.
+          minLength: 1
+          maxLength: 20
         macBindFlag:
-          maximum: 2
+          type: integer
+          description: |-
+            Mac Address Binding Flag  is applicable only for broadband subscriber.
+            1 – Enabled, 2- Disabled
           minimum: 1
-          type: integer
-          format: int32
-        connectionProfileId:
-          type: integer
+          maximum: 2
+          default: 2
           format: int32
         macIds:
           type: array
+          description: |-
+            MacIds are applicable only for broadband subscriber if Mac Address Binding flag is enabled.
+            Mac Address in comma separated values.
           items:
             type: string
-        allowUnknownServices:
-          type: boolean
+            pattern: ^[a-fA-F0-9]{2}((:[a-fA-F0-9]{2}){5}|(-[a-fA-F0-9]{2}){5})$
         imei:
-          maxLength: 15
+          type: string
+          description: IMEI
           minLength: 15
-          type: string
+          maxLength: 15
         subscriptionType:
-          maximum: 4
+          type: integer
+          description: Subscriber Type 1 - Prepaid, 2 - Postpaid, 3 - Hybrid, 4 - AdvancePay
           minimum: 1
-          type: integer
-          format: int32
-        status:
-          maximum: 2
-          minimum: 0
-          type: integer
-          format: int32
+          maximum: 4
         tier:
-          maxLength: 15
-          minLength: 2
           type: string
+          description: Category for which subscriber is part of
+          minLength: 2
+          maxLength: 15
         homeZone:
-          maxLength: 15
-          minLength: 2
           type: string
+          minLength: 2
+          maxLength: 15
         cosId:
           type: integer
-          format: int32
+          description: Service class identifier to identify the service class or class of service assigned to the subscriber.
         accountId:
           type: string
+          description: 'The account identifier for the subscriber, may be used for CDR/billing. '
         billingDay:
           type: integer
-          format: int32
+          description: 'The day of the month on which the quota for the subscriber is to be reset. '
         notificationMsisdn:
-          maxLength: 25
-          minLength: 5
-          pattern: ^[0-9]+
           type: string
+          description: The mobile number used to send messages or reminders to users.
+          minLength: 1
+          maxLength: 25
+          pattern: ^[0-9]+
         adcFlag:
-          maximum: 1
-          minimum: 0
           type: integer
-          format: int32
+          description: Application detection and control enabled or not 0-Disabled, 1 - Enabaled
         subscriberId:
           type: string
+          description: Optional in case of subscriber creation request but mandatory for subscriber creation response. System generated unique identifier for subscriber.
+          readOnly: true
         ipPoolName:
           type: string
+          description: IP pool name used for Broad Band Service - Mandatory  for Broadband Subscriber
         dnsProfile:
           type: string
+          description: DNS Profile Used for Broad Band service - Mandatory  for Broadband Subscriber
+        allowUnknownServices:
+          type: boolean
+          description: 'PCRF to allow unknown services or not. 0 - Notallow, 1 - Allow. Default is 0 '
+          default: false
         allowedServices:
           type: array
           items:
@@ -1916,333 +2062,292 @@ components:
             $ref: '#/components/schemas/UserIdentity'
         demography:
           $ref: '#/components/schemas/DemographyDetail'
+        connectionProfileId:
+          type: string
+          description: Used by PCRF system to control the Subscriber Session s, like number of Sessions per APN, Subscriber etc
+        paygEnabled:
+          type: boolean
+          description: |-
+            Data services (PAYG) pay as you go is enabled or not. 
+            True - enabled, False - Disabled
+          default: true
         extendedInfo:
           type: object
+          description: Any other Application Specific information to be stored in SPR, This has to be a valid Json Object.
+        status:
+          type: integer
+          minimum: 0
+          maximum: 2
+          description: subscriber status 0-Inactive, 1-Active, 2 Deleted
+          default: 1
+        slcState:
+          type: string
+          pattern: ^(IDLE|ACTIVE|AWAIT_ACTIVATION|AWAIT_FIRST_ACTIVATION|SUSPENDED|DISABLED|RETIRED|EXPIRED|FRAUD_LOCKOUT|PENDING|BARRED|DEACTIVATED)$
+          description: subscriber life state possible value (IDLE, ACTIVE,AWAIT_ACTIVATION, AWAIT_FIRST_ACTIVATION,SUSPENDED,DISABLED,RETIRED,EXPIRED,FRAUD_LOCKOUT,PENDING,BARRED,DEACTIVATED)
+          default: ACTIVE
+      required:
+        - service
+        - serviceNumber
     UsageMonitoringCounter:
+      title: UsageMonitoringCounter
+      x-stoplight:
+        id: j1o39ro9x8hfu
       type: object
+      description: 'Counters information to keep track of the consumption levels '
       properties:
         monitoringKey:
-          maxLength: 20
+          type: string
+          description: Key for which usage monitoring to be performed
           minLength: 1
-          type: string
+          maxLength: 20
         value:
-          type: integer
-          format: int64
+          type: number
+          description: Value of the usage
         monitoringLevel:
+          type: integer
+          description: |-
+            0 - Session Level
+            1 - PCC rule Level
+            2 - ADC rule Level
+          minimum: 0
           maximum: 2
-          minimum: 0
-          type: integer
-          format: int32
         status:
-          maximum: 1
-          minimum: 0
           type: integer
-          format: int32
+          description: Current status of the counter will be provided by OCS. 0 - Inactive, 1-Active
+          minimum: 0
+          maximum: 1
         resetTime:
-          maxLength: 17
-          minLength: 17
           type: string
+          description: next reset time in the format "yyyyMMdd HH:mm:ss",
+          minLength: 17
+          maxLength: 17
+      required:
+        - monitoringKey
     UserIdentity:
+      title: UserIdentity
+      x-stoplight:
+        id: owcradcchoyde
       type: object
+      description: Model represents User Identity multiple formats
+      x-examples: {}
       properties:
         type:
-          maximum: 2
+          type: integer
+          description: |-
+            0 - ND_USER_E164: The subscriber's identity in ITU-T E.164 format, as defined in recommendations E164 and CE164.
+
+            1 - END_USER_IMSI: The subscriber's identity in 111International Mobile Subscriber Identity format, as defined in ITU-T recommendations E212 and CE212.
+
+            2 - GENERIC:Generic Subscriber Identity, like Username in case of broadband.
           minimum: 0
-          type: integer
-          format: int32
+          maximum: 2
         value:
+          type: string
+          description: Value of the user Idenity
+          minLength: 1
           maxLength: 25
-          minLength: 1
-          type: string
-    CreateSubscriberResponse:
-      type: object
-      properties:
-        response:
-          $ref: '#/components/schemas/GenericResponse'
-        subscriptionId:
-          minimum: 1
-          type: integer
-          format: int64
-        serviceNumber:
-          type: string
-        reference:
-          type: string
-    GenericResponse:
-      required:
-        - appTxnRefId
-        - status
-        - txnRefId
-      type: object
-      properties:
-        appTxnRefId:
-          maxLength: 50
-          minLength: 1
-          type: string
-        txnRefId:
-          maxLength: 50
-          minLength: 1
-          type: string
-        status:
-          type: integer
-          format: int32
-        errorCode:
-          type: integer
-          format: int32
-        error:
-          type: array
-          items:
-            type: string
-    UserIdentityReq:
-      type: object
-      properties:
-        identities:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserIdentity'
-    GetSubscriberIdentityRsp:
-      required:
-        - response
-      type: object
-      properties:
-        response:
-          $ref: '#/components/schemas/GenericResponse'
-        subscriptionId:
-          minimum: 1
-          type: integer
-          format: int64
-        serviceNumber:
-          type: string
-        identities:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserIdentity'
-        reference:
-          type: string
     UsageMonCounterReq:
-      required:
-        - usageCounter
+      title: UsageMonCounterReq
+      x-stoplight:
+        id: 50ikdk4liyaxv
       type: object
       properties:
         usageCounter:
-          maxItems: 2147483647
+          type: array
           minItems: 1
-          type: array
           items:
             $ref: '#/components/schemas/UsageMonitoringCounter'
-    GetUsageMonCounterRsp:
       required:
-        - response
-      type: object
-      properties:
-        response:
-          $ref: '#/components/schemas/GenericResponse'
-        subscriptionId:
-          minimum: 1
-          type: integer
-          format: int64
-        serviceNumber:
-          type: string
-        reference:
-          type: string
-        usageMonCounter:
-          type: array
-          items:
-            $ref: '#/components/schemas/UsageMonitoringCounter'
-    AllocateUEIPReq:
-      required:
-        - ueIP
-      type: object
-      properties:
-        ueIP:
-          type: array
-          items:
-            $ref: '#/components/schemas/AllocatedUEIP'
-    GetAllocateUEIPRsp:
-      required:
-        - response
-      type: object
-      properties:
-        response:
-          $ref: '#/components/schemas/GenericResponse'
-        subscriptionId:
-          minimum: 1
-          type: integer
-          format: int64
-        serviceNumber:
-          type: string
-        reference:
-          type: string
-        ueIP:
-          type: array
-          items:
-            $ref: '#/components/schemas/AllocatedUEIP'
+        - usageCounter
+      description: List of Usage Monitoring Counter Information to be added/deleted/updated
     SubsPoliciesReq:
-      required:
-        - policies
+      title: SubsPoliciesReq
+      x-stoplight:
+        id: 7s59q117ursrd
       type: object
+      description: Contains Policies information in request for Create/Update/Delete Policies API's
       properties:
         policies:
           type: array
+          description: List of Subscriber Policies
           items:
             $ref: '#/components/schemas/PolicyProfile'
-    GetSubscriberPolicyRsp:
       required:
-        - response
+        - policies
+    SubsPackageReq:
+      title: SubsPackageReq
+      x-stoplight:
+        id: ps54q3j6mudoe
       type: object
+      description: Contains Package information in request for Create/Update/Delete Subscriber Package API's
+      properties:
+        packages:
+          type: array
+          description: List of Subscriber Packages
+          items:
+            $ref: '#/components/schemas/PackageInfo'
+      required:
+        - packages
+    AllocateUEIPReq:
+      title: AllocateUEIPReq
+      x-stoplight:
+        id: aslz8i2e9n2b5
+      type: object
+      description: Contains list User Equipement IPs to be created, deleted
+      properties:
+        ueIP:
+          type: array
+          description: List of UE IPs
+          items:
+            $ref: '#/components/schemas/AllocatedUEIP'
+      required:
+        - ueIP
+    GetAllocateUEIPRsp:
+      title: GetAllocateUEIPRsp
+      type: object
+      description: Retrieve Subscriber Allocated UE IPs in Response. SPR System will provide List of all the UE IPs for a requested service number if the request status is success.
       properties:
         response:
           $ref: '#/components/schemas/GenericResponse'
         subscriptionId:
-          minimum: 1
           type: integer
           format: int64
+          minimum: 1
+          description: Unique Subscription Id generated by SPR System
         serviceNumber:
           type: string
-        subsPolicies:
-          type: array
-          items:
-            $ref: '#/components/schemas/PolicyProfile'
+          description: Service Number
         reference:
           type: string
+          format: uri
+        ueIP:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocatedUEIP'
+      required:
+        - response
+      x-stoplight:
+        id: 99bxda4c5pl8l
     AllowedServicesReq:
+      title: AllowedServicesReq
+      x-stoplight:
+        id: s5kfzfuympxdc
       type: object
+      description: List of Allowed services used in creation or deletion APIS
       properties:
         allowedServices:
           type: array
           items:
             $ref: '#/components/schemas/AllowedServices'
-    GetAllowedServicesRsp:
-      required:
-        - response
+    UserIdentityReq:
+      title: UserIdentityReq
+      x-stoplight:
+        id: ecyq4x2wseus4
       type: object
+      description: User Identity Request
       properties:
-        response:
-          $ref: '#/components/schemas/GenericResponse'
-        subscriptionId:
-          minimum: 1
-          type: integer
-          format: int64
-        serviceNumber:
-          type: string
-        services:
+        identities:
           type: array
           items:
-            $ref: '#/components/schemas/AllowedServices'
-        reference:
-          type: string
-    SubsPackageReq:
-      required:
-        - packages
-      type: object
-      properties:
-        packages:
-          type: array
-          items:
-            $ref: '#/components/schemas/PackageInfo'
-    GetSubscriberPackageRsp:
-      required:
-        - response
-      type: object
-      properties:
-        response:
-          $ref: '#/components/schemas/GenericResponse'
-        subscriptionId:
-          minimum: 1
-          type: integer
-          format: int64
-        serviceNumber:
-          type: string
-        packages:
-          type: array
-          items:
-            $ref: '#/components/schemas/PackageInfo'
-        reference:
-          type: string
+            $ref: '#/components/schemas/UserIdentity'
     MacIdsReq:
+      title: MacIdsReq
+      x-stoplight:
+        id: wbtqityv1pp6b
       type: object
+      description: MAC Address Request
       properties:
         macIds:
           type: array
+          description: List of MAC Addresses
           items:
             type: string
-    GetSubscriberMacIdsRsp:
-      required:
-        - response
+            pattern: ^[a-fA-F0-9]{2}((:[a-fA-F0-9]{2}){5}|(-[a-fA-F0-9]{2}){5})$
+      x-examples:
+        example-1:
+          macIds:
+            - string
+    SateliteServiceInfo:
+      title: SateliteServiceInfo
+      x-stoplight:
+        id: 5zqt0u7aqc06h
       type: object
       properties:
-        response:
-          $ref: '#/components/schemas/GenericResponse'
-        subscriptionId:
-          minimum: 1
+        gatewayId:
           type: integer
-          format: int64
-        serviceNumber:
-          type: string
-        macIds:
-          type: array
-          items:
-            type: string
-        reference:
-          type: string
-    SubscriberGroupReq:
-      type: object
-      properties:
-        group:
-          type: array
-          items:
-            $ref: '#/components/schemas/Group'
-    GetSubscriberGroupRsp:
-      required:
-        - response
-      type: object
-      properties:
-        response:
-          $ref: '#/components/schemas/GenericResponse'
-        subscriptionId:
-          minimum: 1
+        deviceType:
           type: integer
-          format: int64
-        serviceNumber:
+        transmissionTechnology:
           type: string
-        group:
-          type: array
-          items:
-            $ref: '#/components/schemas/Group'
-        reference:
-          type: string
-    GetSubscriberResponse:
-      type: object
-      properties:
-        response:
-          $ref: '#/components/schemas/GenericResponse'
-        subscriberProfile:
-          $ref: '#/components/schemas/SubscriberProfile'
-        subscriberProfileList:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriberProfile'
-    GenericApiResponse:
-      required:
-        - appTxnRefId
-        - status
-        - txnRefId
-      type: object
-      properties:
-        appTxnRefId:
-          maxLength: 50
-          minLength: 1
-          type: string
-        txnRefId:
-          maxLength: 50
-          minLength: 1
-          type: string
-        status:
+        vLanId:
           type: integer
-          format: int32
-        errorCode:
+        beamId:
           type: integer
-          format: int32
-        error:
-          type: array
-          items:
-            type: string
+        beamLocation:
+          type: string
+        subsIpV4Subnet:
+          type: string
+  securitySchemes:
+    SPR-Basic-Authorization:
+      type: http
+      scheme: basic
+  parameters:
+    AppRefId:
+      name: AppRefId
+      in: query
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 50
+      description: Application Transaction Reference Id
+    Authorization:
+      name: Authorization
+      in: header
+      schema:
+        type: string
+        example: Basic dXNlcm5hbWU6cGFzc3dvcmQ=
+      description: 'API authentication  for external systems is done by HTTP basic authentication ''username: password'' and is encoded in base64 and sent under the Authorization header'
+      required: true
+    serviceName:
+      name: serviceName
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Service Name
+    reqMode:
+      name: reqMode
+      in: query
+      required: true
+      schema:
+        type: integer
+      description: Modes from which limit and numbers can be managed example portal, customer care, USSD dialing..etc.
+    serviceNumber:
+      name: serviceNumber
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+    AppId:
+      name: AppId
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Application Id to be used, generally derived from UserName, but can be overridden with this query parameter
+    getAll:
+      name: getAll
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: Request for updated data in Response. For Create, Update API requests, Get Operation Response will be included if this parameter is set true
+  responses: {}
+tags:
+  - name: Device Info
+  - name: Package Details
+  - name: SPR
+  - name: Subscriber Profile
+  - name: Usage Monitoring
