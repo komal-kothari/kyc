@@ -171,7 +171,7 @@ paths:
         required: true
         schema:
           type: string
-        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband or Satellite Service etc.
     get:
       summary: Create Subscriber Usage monitoring information
       operationId: SprGetUsageMonitoringInfo
@@ -322,7 +322,7 @@ paths:
         required: true
         schema:
           type: string
-        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband or Satellite Service etc.
     get:
       summary: Get Subscriber Policies
       operationId: SprGetSubscriberPolicies
@@ -466,7 +466,7 @@ paths:
         required: true
         schema:
           type: string
-        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband or Satellite Service etc.
     get:
       summary: Get Subscriber Group
       operationId: SprGetSubscriberGroup
@@ -571,7 +571,7 @@ paths:
         required: true
         schema:
           type: string
-        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband or Satellite Service etc.
     get:
       summary: Get Subscriber UE IPs
       operationId: SprGetSubscriberUeIP
@@ -676,7 +676,7 @@ paths:
         required: true
         schema:
           type: string
-        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband or Satellite Service etc.
     get:
       summary: Get Subscriber Services
       operationId: SprGetSubscriberServices
@@ -781,7 +781,7 @@ paths:
         required: true
         schema:
           type: string
-        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband or Satellite Service etc.
     get:
       summary: Get Subscriber MAC Addresses
       operationId: SprGetSubscriberMac
@@ -886,7 +886,7 @@ paths:
         required: true
         schema:
           type: string
-        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband or Satellite Service etc.
     get:
       summary: Get Subscriber User Identities
       operationId: SprGetSubscriberIdentities
@@ -991,7 +991,7 @@ paths:
         required: true
         schema:
           type: string
-        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+        description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband or Satellite Service etc.
     get:
       summary: Get Subscriber Package Information
       operationId: SprGetSubscriberPackage
@@ -1929,7 +1929,29 @@ components:
               - type: string
                 docNumber: string
           extendedInfo:
-            - {}
+            platform: Jupiter2
+            servicePackage: JU3090V
+            spCountry: Afghanistan
+            jailGroup: false
+            redirectTest: false
+            swapRedirect: false
+            spName: Neda Afghanistan
+            spCode: IWU
+            beamId: Y1B052
+            compliance: TIB
+            spTimeZone: gmt+4.5
+            LStatus: Unlocked
+            subscriberId: SUB-8829102
+            gateway: ABU
+            enterpriseId: ENT-9901
+            outRoute: '1'
+            subscriberOid: '10029384'
+            sessionOid: '9928374'
+            redirectionCountry: Turkey
+            csValue: HighPriority
+            redirectionStatus: false
+            dataCenter: MAD
+            vlanId: VLAN01
       properties:
         service:
           type: string
@@ -1943,7 +1965,7 @@ components:
             - OTHER
         serviceNumber:
           type: string
-          description: MSISDN in case of Mobile Service. Dummy Service Number/userName in case of broadband subscriber (to be used for Gy Session)
+          description: MSISDN in case of Mobile Service. Dummy Service Number in case of broadband or Satellite subscriber (to be used for Gy Session)
           maxLength: 25
           minLength: 0
         language:
@@ -1966,7 +1988,7 @@ components:
           minLength: 17
         userName:
           type: string
-          description: 'User Name is applicable only for broadband subscriber  - Mandatory  for Broadband Subscriber '
+          description: 'User Name is applicable only for broadband subscriber  - Mandatory  for Broadband or Satellite Subscriber '
           maxLength: 30
           minLength: 0
         password:
@@ -2087,7 +2109,6 @@ components:
           default: ACTIVE
       required:
         - service
-        - serviceNumber
     UsageMonitoringCounter:
       title: UsageMonitoringCounter
       x-stoplight:
@@ -2138,7 +2159,7 @@ components:
 
             1 - END_USER_IMSI: The subscriber's identity in 111International Mobile Subscriber Identity format, as defined in ITU-T recommendations E212 and CE212.
 
-            2 - GENERIC:Generic Subscriber Identity, like Username in case of broadband.
+            2 - GENERIC:Generic Subscriber Identity, like Username in case of broadband or Satellite service.
           minimum: 0
           maximum: 2
         value:
@@ -2329,7 +2350,7 @@ components:
       required: true
       schema:
         type: string
-      description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, UserName for Broadband Service etc.
+      description: Service Number is the subscriber identity i.e. MSISDN for Mobile Service, Dummy Service Number for Broadband or Satellite Service etc.
     AppId:
       name: AppId
       in: query
